@@ -1,37 +1,10 @@
-import { ApolloServer, gql, Config  } from 'apollo-server'
+import { ApolloServer } from 'apollo-server'
 import { appSchema } from "./schema";
-import { AWSJourneyDataSource } from "./dataSources/AwsJourney";
-import { IResolvers } from 'graphql-tools';
+import { resolvers } from "./resolvers";
+import { dataSources } from "./dataSources/rootDS";
 
-export interface Context {
-   dataSources: {
-      AWSJourney: AWSJourneyDataSource;
-   };
-}
-const dataSources = (): Context['dataSources'] => {
-   return {
-      AWSJourney: new AWSJourneyDataSource()
-   };
- };
+const server = new ApolloServer({ typeDefs: appSchema, resolvers, dataSources });
 
-const resolvers: IResolvers = {
-    Query: {
-        getLab: async (_source, {id}, { dataSources }) => {
-            return dataSources.AWSJourney.getLab(id)
-        }
-    },
-    Mutation: {
-        setLab: async (_source, {id, description}, { dataSources }) => {
-            return dataSources.AWSJourney.updateLab(id, {description})
-        }
-    }
-}
-
-const typeDefs = appSchema
-
-const server = new ApolloServer({ typeDefs, resolvers, dataSources });
-
-// The `listen` method launches a web server.
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });

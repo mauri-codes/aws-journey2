@@ -5,7 +5,7 @@ const appSchema = gql`
       getLab(id: ID!): Lab
    }
    type Mutation {
-      setLab(id: ID!, input: setLabInput): Lab
+      setLab(lab: setLabInput, overview:setOverviewInput, test:setTestInput): Lab
    }
    type Lab {
       id: ID!
@@ -22,7 +22,16 @@ const appSchema = gql`
       tests: [String]
    }
    input setLabInput {
+      id: ID!
+      title: String
+   }
+   input setOverviewInput {
       description: String
+      goals: [String]
+      services: [String]
+   }
+   input setTestInput {
+      tests: [String]
    }
 `;
 

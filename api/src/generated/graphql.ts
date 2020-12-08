@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Context } from '../index';
+import { Context } from '../dataSources/rootDS';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -31,10 +31,7 @@ export type Mutation = {
 
 
 export type MutationSetLabArgs = {
-  id: Scalars['ID'];
-  title?: Maybe<Scalars['String']>;
-  overview?: Maybe<Overview>;
-  TestSection?: Maybe<TestSection>;
+  input?: Maybe<SetLabInput>;
 };
 
 export type Lab = {
@@ -55,6 +52,10 @@ export type Overview = {
 export type TestSection = {
   __typename?: 'TestSection';
   tests?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type SetLabInput = {
+  lab?: Maybe<Lab>;
 };
 
 
@@ -138,10 +139,11 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Lab: ResolverTypeWrapper<Lab>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   Overview: ResolverTypeWrapper<Overview>;
   TestSection: ResolverTypeWrapper<TestSection>;
+  setLabInput: SetLabInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
@@ -150,10 +152,11 @@ export type ResolversParentTypes = {
   Query: {};
   ID: Scalars['ID'];
   Mutation: {};
-  String: Scalars['String'];
   Lab: Lab;
+  String: Scalars['String'];
   Overview: Overview;
   TestSection: TestSection;
+  setLabInput: SetLabInput;
   Boolean: Scalars['Boolean'];
 };
 
@@ -162,7 +165,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  setLab?: Resolver<Maybe<ResolversTypes['Lab']>, ParentType, ContextType, RequireFields<MutationSetLabArgs, 'id'>>;
+  setLab?: Resolver<Maybe<ResolversTypes['Lab']>, ParentType, ContextType, RequireFields<MutationSetLabArgs, never>>;
 };
 
 export type LabResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Lab'] = ResolversParentTypes['Lab']> = {

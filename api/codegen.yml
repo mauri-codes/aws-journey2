@@ -5,7 +5,7 @@ schema:
 generates:
   src/generated/graphql.ts:
     config:
-      contextType: ../index#Context
+      contextType: ../dataSources/rootDS#Context
     plugins:
       - 'typescript'
       - 'typescript-resolvers'
