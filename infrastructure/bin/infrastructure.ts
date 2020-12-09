@@ -3,6 +3,7 @@ import 'source-map-support/register'
 import * as cdk from '@aws-cdk/core'
 import { UsersStack } from '../stacks/users-stack'
 import { DBStack } from '../stacks/db-stack'
+import { ApiStack } from "../stacks/api-stack";
 
 const aws_env = { 
    account: process.env.CDK_DEFAULT_ACCOUNT, 
@@ -15,5 +16,10 @@ new UsersStack(app, 'users-stack',{
 });
 
 new DBStack(app, 'db-stack', {
+   env: aws_env
+})
+
+
+new ApiStack(app, 'api-stack', {
    env: aws_env
 })
