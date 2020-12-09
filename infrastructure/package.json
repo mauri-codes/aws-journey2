@@ -21,8 +21,10 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
+    "@aws-cdk/aws-appsync": "^1.76.0",
     "@aws-cdk/aws-certificatemanager": "^1.74.0",
     "@aws-cdk/aws-cognito": "^1.74.0",
+    "@aws-cdk/aws-dynamodb": "^1.76.0",
     "@aws-cdk/aws-route53": "^1.74.0",
     "@aws-cdk/aws-route53-targets": "^1.74.0",
     "@aws-cdk/core": "1.72.0",

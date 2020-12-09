@@ -1,7 +1,7 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from '@aws-cdk/core'
 import { AWSJourneyCertificate } from '../constructs/certificate'
-import { Certificate } from '@aws-cdk/aws-certificatemanager';
-import { RecordTarget, ARecord, IHostedZone } from '@aws-cdk/aws-route53';
+import { Certificate } from '@aws-cdk/aws-certificatemanager'
+import { RecordTarget, ARecord, IHostedZone } from '@aws-cdk/aws-route53'
 import { UserPoolDomainTarget } from '@aws-cdk/aws-route53-targets'
 import {
    UserPool,
