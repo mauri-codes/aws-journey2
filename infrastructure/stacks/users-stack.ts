@@ -14,6 +14,7 @@ import {
 } from '@aws-cdk/aws-cognito'
 
 export class UsersStack extends cdk.Stack {
+   userPool: IUserPool
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
       super(scope, id, props);
       const prefix = "auth"
@@ -28,7 +29,7 @@ export class UsersStack extends cdk.Stack {
       const client = this.setUpClient(userPool, domain)
       
       this.setUpCertificate(userPool, authDomain, certificate.certificateArn, hostedZone)
-      
+      this.userPool = userPool
    }
    createUserPool(name: string) {
       const userPool = new UserPool(this, 'aws-journey-users', {

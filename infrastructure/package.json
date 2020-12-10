@@ -21,13 +21,14 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^1.77.0",
-    "@aws-cdk/aws-certificatemanager": "^1.74.0",
-    "@aws-cdk/aws-cognito": "^1.74.0",
-    "@aws-cdk/aws-dynamodb": "^1.77.0",
-    "@aws-cdk/aws-lambda": "^1.77.0",
-    "@aws-cdk/aws-route53": "^1.74.0",
-    "@aws-cdk/aws-route53-targets": "^1.74.0",
+    "@aws-cdk/aws-apigateway": "1.72.0",
+    "@aws-cdk/aws-certificatemanager": "1.72.0",
+    "@aws-cdk/aws-cognito": "1.72.0",
+    "@aws-cdk/aws-dynamodb": "1.72.0",
+    "@aws-cdk/aws-iam": "1.72.0",
+    "@aws-cdk/aws-lambda": "1.72.0",
+    "@aws-cdk/aws-route53": "1.72.0",
+    "@aws-cdk/aws-route53-targets": "1.72.0",
     "@aws-cdk/core": "1.72.0",
     "source-map-support": "^0.5.16"
   }
