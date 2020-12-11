@@ -1,4 +1,3 @@
-require("dotenv").config();
 import path from 'path'
 import AWS from 'aws-sdk';
 import { DataSource } from 'apollo-datasource';

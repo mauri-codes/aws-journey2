@@ -10,7 +10,11 @@ functions:
         path: graphql
         method: post
         cors: true
+        integration: lambda-proxy
     - http:
         path: graphql
         method: get
         cors: true
+        integration: lambda-proxy
+plugins:
+  - serverless-plugin-typescript

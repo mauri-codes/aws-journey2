@@ -8,8 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.4",
     "@aws-amplify/ui-react": "^0.2.30",
     "aws-amplify": "^3.3.10",
+    "axios": "^0.21.0",
+    "graphql": "^15.4.0",
     "mobx": "^6.0.4",
     "mobx-react": "^7.0.5",
     "next": "10.0.3",
