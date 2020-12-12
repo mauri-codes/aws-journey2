@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-lambda'
 
 const appSchema = gql`
    type Query {
-      getLab(id: ID!): Lab
+      getLab(id: ID!): LabResponse
    }
    type Mutation {
       setLab(lab: setLabInput, overview:setOverviewInput, test:setTestInput): Lab
@@ -19,7 +19,12 @@ const appSchema = gql`
       services: [String]
    }
    type TestSection {
-      tests: [String]
+      tests: [Test]
+   }
+   type Test {
+      description: String
+      location: String
+      order: Int
    }
    input setLabInput {
       id: ID!
@@ -32,6 +37,11 @@ const appSchema = gql`
    }
    input setTestInput {
       tests: [String]
+   }
+   type LabResponse {
+      success: Boolean
+      lab: Lab
+      message: String
    }
 `;
 

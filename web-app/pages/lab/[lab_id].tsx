@@ -14,8 +14,22 @@ export default function  Lab () {
             .query({
                query: gql`
                   query GetRates {
-                     getLab(id: "alab") {
-                        title
+                     getLab(id: "S3_static_website") {
+                        message
+                        success
+                        lab {
+                           title
+                           overview {
+                              description
+                              goals
+                              services
+                           }
+                           testSection {
+                              tests {
+                                 description
+                              }
+                           }
+                        }
                      }
                   }
                `

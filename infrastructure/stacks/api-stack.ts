@@ -18,7 +18,6 @@ export class ApiStack extends cdk.Stack {
       super(scope, id, props);
       const dynamoStatement = this.createDynamoDBStatement()
       const processor = this.createLambdaProcessor(dynamoStatement)
-      
       const api = new LambdaRestApi(this, 'apollo-api', {
          handler: processor,
          proxy: false,

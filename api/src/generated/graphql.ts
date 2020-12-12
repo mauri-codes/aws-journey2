@@ -16,7 +16,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  getLab?: Maybe<Lab>;
+  getLab?: Maybe<LabResponse>;
 };
 
 
@@ -31,7 +31,9 @@ export type Mutation = {
 
 
 export type MutationSetLabArgs = {
-  input?: Maybe<SetLabInput>;
+  lab?: Maybe<SetLabInput>;
+  overview?: Maybe<SetOverviewInput>;
+  test?: Maybe<SetTestInput>;
 };
 
 export type Lab = {
@@ -51,11 +53,36 @@ export type Overview = {
 
 export type TestSection = {
   __typename?: 'TestSection';
-  tests?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tests?: Maybe<Array<Maybe<Test>>>;
+};
+
+export type Test = {
+  __typename?: 'Test';
+  description?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  order?: Maybe<Scalars['Int']>;
 };
 
 export type SetLabInput = {
+  id: Scalars['ID'];
+  title?: Maybe<Scalars['String']>;
+};
+
+export type SetOverviewInput = {
+  description?: Maybe<Scalars['String']>;
+  goals?: Maybe<Array<Maybe<Scalars['String']>>>;
+  services?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type SetTestInput = {
+  tests?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type LabResponse = {
+  __typename?: 'LabResponse';
+  success?: Maybe<Scalars['Boolean']>;
   lab?: Maybe<Lab>;
+  message?: Maybe<Scalars['String']>;
 };
 
 
@@ -143,7 +170,12 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Overview: ResolverTypeWrapper<Overview>;
   TestSection: ResolverTypeWrapper<TestSection>;
+  Test: ResolverTypeWrapper<Test>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   setLabInput: SetLabInput;
+  setOverviewInput: SetOverviewInput;
+  setTestInput: SetTestInput;
+  LabResponse: ResolverTypeWrapper<LabResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
@@ -156,12 +188,17 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Overview: Overview;
   TestSection: TestSection;
+  Test: Test;
+  Int: Scalars['Int'];
   setLabInput: SetLabInput;
+  setOverviewInput: SetOverviewInput;
+  setTestInput: SetTestInput;
+  LabResponse: LabResponse;
   Boolean: Scalars['Boolean'];
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getLab?: Resolver<Maybe<ResolversTypes['Lab']>, ParentType, ContextType, RequireFields<QueryGetLabArgs, 'id'>>;
+  getLab?: Resolver<Maybe<ResolversTypes['LabResponse']>, ParentType, ContextType, RequireFields<QueryGetLabArgs, 'id'>>;
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -184,7 +221,21 @@ export type OverviewResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type TestSectionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TestSection'] = ResolversParentTypes['TestSection']> = {
-  tests?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  tests?: Resolver<Maybe<Array<Maybe<ResolversTypes['Test']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TestResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Test'] = ResolversParentTypes['Test']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  location?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LabResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LabResponse'] = ResolversParentTypes['LabResponse']> = {
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  lab?: Resolver<Maybe<ResolversTypes['Lab']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -194,6 +245,8 @@ export type Resolvers<ContextType = Context> = {
   Lab?: LabResolvers<ContextType>;
   Overview?: OverviewResolvers<ContextType>;
   TestSection?: TestSectionResolvers<ContextType>;
+  Test?: TestResolvers<ContextType>;
+  LabResponse?: LabResponseResolvers<ContextType>;
 };
 
 

@@ -1,5 +1,5 @@
 import { DynamoDataSource, DynamoRecord } from "./DynamoDS";
-import { Lab, Overview, TestSection } from "../generated/graphql";
+import { Lab, Overview, TestSection, LabResponse } from "../generated/graphql";
 
 type OverviewRecord = DynamoRecord & Overview
 type TestSectionRecord = DynamoRecord & TestSection
@@ -13,27 +13,54 @@ class AWSJourneyDataSource extends DynamoDataSource{
    }
    async getLab(id: string) {
       let labData = {}
-      const queryResult = (await this.query(`lab_${id}`))["Items"]
-      let summaryLab = queryResult?.reduce((acc, item) => {
-         let location
-         if (item["sk"] == "overview") {
-            location = "tests"
-         } else if (item["sk"] == "overview") {
-            location = "overview"
-         } else {
-            location = "data"
-            item["id"] = id
+      try {
+         let queryResult = (await this.query(`lab_${id}`))["Items"]
+         if (queryResult && queryResult.length == 0) {
+            throw 'No record found';
          }
-         delete item.sk
-         delete item.pk
-         acc[location] = item
-         return acc
-      }, {})
-      if (summaryLab) {
-         labData = (summaryLab["data"] || {});
+         let tests: any[] = []
+         queryResult = queryResult?.flatMap(record => {
+            if (record["sk"].startsWith("test")) {
+               delete record.sk
+               delete record.pk
+               tests.push(record)
+               return []
+            }
+            return [record]
+         })
+         let summaryLab = queryResult?.reduce((acc, item) => {
+            let location = "data"
+            if (item["sk"] == "overview") {
+               location = "overview"
+            } if (item["sk"] == "data") {
+               location = "data"
+               item["id"] = id
+            }
+            delete item.sk
+            delete item.pk
+            acc[location] = item
+            return acc
+         }, {})
+         if (tests.length != 0 && summaryLab) {
+            summaryLab["testSection"] = {
+               tests
+            }
+         }
+         if (summaryLab) {
+            labData = (summaryLab["data"] || {});
+         }
+         const lab = {...summaryLab, ...labData}
+         return {
+            success: true,
+            lab
+         }
+
+      } catch(error) {
+         return {
+            success: false,
+            message: error
+         }
       }
-      const lab = {...summaryLab, ...labData}
-      return lab
    }
    async updateLab(lab: Lab) {
       const pk = `lab_${lab.id}`
