@@ -29,5 +29,17 @@ export { LayoutComponent }
 const Content = styled.div`
    padding-top: 4.5rem;
    min-height: 100vh;
-
+   
+   @media only screen and (max-width: 768px) {
+      padding-left: 0;
+      padding-right: 0;
+   }
+   @media only screen and (min-width: 768px) {
+      padding-left: 5vw;
+      padding-right: 5vw;
+   }
+   @media only screen and (min-width: 1200px) {
+      padding-left: 10vw;
+      padding-right: 10vw;
+   }
 `

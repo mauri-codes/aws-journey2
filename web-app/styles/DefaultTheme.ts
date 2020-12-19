@@ -12,6 +12,8 @@ const cadet = "hsl(198, 21%, 39%)"
 
 const copper = "hsl(28, 41%, 51%)"
 
+const mainColor = "hsl(203, 12%, 27%)"
+
 
 const burgundy = "hsl(348, 92%, 28%)"
 
@@ -23,7 +25,7 @@ const DefaultTheme = {
    },
    colors: {
       background: cultured,
-      primary: blackCoffee,
+      primary: mainColor,
       accent: copper,
       error: burgundy,
       text: '#000'

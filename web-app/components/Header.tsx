@@ -14,7 +14,9 @@ const HeaderComponent = () => {
       <Header sx={{backgroundColor:"primary"}} >
          <Logo>logo</Logo>
          <Nav>
-            <AmplifySignOut />
+            <NavLink>
+               Sign Out
+            </NavLink>
          </Nav>
       </Header>
    )
@@ -31,7 +33,19 @@ const Header = styled.div`
    position: fixed;
    height: 4.5rem;
    width: 100vw;
-   padding: 0 1rem;
+   padding: 0 0;   
+   @media only screen and (max-width: 768px) {
+      padding-left: 0;
+      padding-right: 0;
+   }
+   @media only screen and (min-width: 768px) {
+      padding-left: 5vw;
+      padding-right: 5vw;
+   }
+   @media only screen and (min-width: 1200px) {
+      padding-left: 10vw;
+      padding-right: 10vw;
+   }
 `
 
 const Logo = styled.div`
@@ -42,15 +56,15 @@ const Nav = styled.div`
    display: flex;
    justify-content: flex-end;
    flex: 1 0 0;
+   color: white;
 `
 
 const NavLink = styled.div`
    color: white;
-   font-size: 1.1rem;
    padding: 0.7rem 2rem;
    cursor: pointer;
    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      text-decoration: underline;
    }
    + * {
       margin-left: 1rem;
