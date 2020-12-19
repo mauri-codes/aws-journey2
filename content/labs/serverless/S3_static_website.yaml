@@ -1,0 +1,54 @@
+lab: S3_static_website
+info:
+  title: S3 Static Website
+  location: "serverless"
+overview:
+  description: >
+    You can use Amazon S3 to host a static website. Static websites don't need an active
+    server and are generally cheaper.
+  goals:
+    - Create an S3 bucket and configure it to host a static website
+    - Upload an example SPA application
+    - Enable HTTPS with CloudFront
+  services:
+    - S3
+    - CloudFront
+testGroups:
+  - id: S3BucketTests
+    title: S3 Website Bucket Configuration
+    tests:
+      - id: BucketPolicyIsPublic
+        errors:
+          - code: NoSuchBucketPolicy
+            message: No Bucket Policy Found
+      - id: BucketWebsiteConfiguration
+        errors:
+          - code: NoSuchWebsiteConfiguration
+            message: No Website Configuration Found
+          - code: _MissingIndexErrorDocuments
+            message: No Index or Error Files Configured in Website Configuration
+      - id: AccessBlockIsPublic
+      - id: BucketWebsiteEndpointOperational
+        errors:
+          - code: "403"
+            message: "S3 Website endpoint not availble, Forbidden 403"
+  - id: CloudFrontTests
+    title: CloudFront Distribution Configuration
+    tests:
+      - id: DistributionHasHTTPSDefaultConfiguration
+        errors:
+          - code: _CloudFrontNotDefaultCertificate
+            message: CloudFront is not the default Certificate Source for distribution
+      - id: DistributionHasS3WebsiteOrigin
+        errors:
+          - code: _NoS3WebsiteDomainInCloudFront
+            message: No origin with S3 website endpoint found
+    errors:
+      - code: _NoDistributionList
+        message: No distribution configuration found
+      - code: _TooManyDistributions
+        message: You have more than 10 distributions in your account
+      - code: _NoTaggedDistribution
+        message: No distribution found with tag [journey, s3-website]
+      - code: _OnlyOneTaggedDistributtionAllowed
+        message: You should only have one distribution tagged with [journey, s3-website]
