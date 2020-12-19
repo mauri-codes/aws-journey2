@@ -1,12 +1,16 @@
 const fs = require('fs')
+import minimist from "minimist"
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 const copyFile = util.promisify(fs.copyFile)
 const path = require('path')
 // const fse = require('fs-extra');
 
+const args = minimist(process.argv.slice(2))
+
 class LambdaPackage {
-   constructor(directory) {
+   directory: string
+   constructor(directory: string) {
      this.directory = directory
    }
    async package() {
@@ -26,7 +30,6 @@ class LambdaPackage {
    }
 }
 
-
-const packageLambda = new LambdaPackage(path.join(__dirname, "../api"))
+const packageLambda = new LambdaPackage(path.join(__dirname, args.dir))
 
 packageLambda.package()

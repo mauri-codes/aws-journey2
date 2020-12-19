@@ -7,6 +7,8 @@ import { StoreContext } from "../../state/RootStore"
 
 export default function  Lab () {
    const { authStore: { apolloClient } } = useContext(StoreContext)
+   const router = useRouter()
+   const { lab_id } = router.query
 
    useEffect(() => {
       if (apolloClient){
@@ -14,7 +16,7 @@ export default function  Lab () {
             .query({
                query: gql`
                   query GetRates {
-                     getLab(id: "S3_static_website") {
+                     getLab(id: "${lab_id}") {
                         message
                         success
                         lab {
@@ -25,8 +27,12 @@ export default function  Lab () {
                               services
                            }
                            testSection {
-                              tests {
-                                 description
+                              testGroups {
+                                 id
+                                 title
+                                 tests {
+                                    id
+                                 }
                               }
                            }
                         }
@@ -37,8 +43,6 @@ export default function  Lab () {
             .then(result => console.log(result));
       }
    }, [apolloClient])
-   const router = useRouter()
-   const { lab_id } = router.query
 
    return (
       <div>{lab_id}</div>

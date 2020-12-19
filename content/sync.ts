@@ -46,7 +46,7 @@ const { lab, info, overview, testGroups } = labData
 const pk = `lab_${lab}`
 
 const tests = labData.testGroups.map(testGroup => ({
-   pk, sk: `test_${testGroup.id}`,
+   pk, sk: `testgroup_${testGroup.id}`,
    ...testGroup
 }))
 

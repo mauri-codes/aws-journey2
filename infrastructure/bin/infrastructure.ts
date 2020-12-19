@@ -19,7 +19,6 @@ new DBStack(app, 'db-stack', {
    env: aws_env
 })
 
-
 new ApiStack(app, 'api-stack', {
    env: aws_env,
    userpool: usersStack.userPool

@@ -18,12 +18,12 @@ class AWSJourneyDataSource extends DynamoDataSource{
          if (queryResult && queryResult.length == 0) {
             throw 'No record found';
          }
-         let tests: any[] = []
+         let testGroups: any[] = []
          queryResult = queryResult?.flatMap(record => {
-            if (record["sk"].startsWith("test")) {
+            if (record["sk"].startsWith("testgroup")) {
                delete record.sk
                delete record.pk
-               tests.push(record)
+               testGroups.push(record)
                return []
             }
             return [record]
@@ -41,9 +41,9 @@ class AWSJourneyDataSource extends DynamoDataSource{
             acc[location] = item
             return acc
          }, {})
-         if (tests.length != 0 && summaryLab) {
+         if (testGroups.length != 0 && summaryLab) {
             summaryLab["testSection"] = {
-               tests
+               testGroups
             }
          }
          if (summaryLab) {

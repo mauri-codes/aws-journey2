@@ -19,12 +19,21 @@ const appSchema = gql`
       services: [String]
    }
    type TestSection {
-      tests: [Test]
+      testGroups: [TestGroup]
+   }
+   type TestError {
+      code: String
+      message: String
    }
    type Test {
-      description: String
-      location: String
-      order: Int
+      id: String
+      errors: [TestError]
+   }
+   type TestGroup {
+      id: String
+      title: String
+      tests: [Test]
+      errors: [TestError]
    }
    input setLabInput {
       id: ID!
@@ -36,7 +45,7 @@ const appSchema = gql`
       services: [String]
    }
    input setTestInput {
-      tests: [String]
+      testGroups: [String]
    }
    type LabResponse {
       success: Boolean
