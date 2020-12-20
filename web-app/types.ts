@@ -1,28 +1,34 @@
 
 
-interface Error {
+export interface Error {
    code: string
    message: string
 }
 
-interface Test {
+export interface Test {
    id: string
    errors: Error[]
 }
 
-interface TestGroup {
+export interface TestGroup {
    id: string
    title: string
    tests: Test[]
    errors: Error[]
 }
 
+export interface Overview {
+   description: string
+   goals: string[]
+   services: string[]
+}
+
+export interface TestSection {
+   testGroups: TestGroup[]
+}
+
 export interface LabData {
    title
-   overview: {
-      Description: string
-      Goals: string[]
-      Services: string[]
-   }
-   testGroups: TestGroup[]
+   overview: Overview
+   testSection: TestSection
 }

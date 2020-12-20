@@ -20,6 +20,13 @@ const GlobalStyles = css`
       color: #222;
       /* line-height: 1.1; */
    }
+   li {
+      margin-top: 0.3rem;
+      margin-bottom: 0.3rem;
+   }
+   hr {
+      border:  0.5px solid lightgray;
+   }
 `
 
 export { GlobalStyles }

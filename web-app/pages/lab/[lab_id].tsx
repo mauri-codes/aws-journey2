@@ -1,13 +1,12 @@
 import { useRouter } from 'next/router'
-import { useEffect, useContext, useState } from "react";
-import { getLabQuery } from "../../queries/lab";
+import { useEffect, useContext, useState } from "react"
+import { getLabQuery } from "../../queries/lab"
 import styled from "@emotion/styled"
-import { LabData } from "../../types";
+import { LabData } from "../../types"
+import { Tabs } from "../../components/Lab/styled";
 
 import { StoreContext } from "../../state/RootStore"
-
-
-type Tabs = "Overview" | "Tests"
+import { LabContentsComponent } from "../../components/Lab/LabContents"
 
 export default function  Lab () {
    const { authStore: { apolloClient } } = useContext(StoreContext)
@@ -54,14 +53,11 @@ export default function  Lab () {
                      {lab.title}
                   </Title>
                </TitleContainer>
-               <LabContents>
-                  <LabContent>
-                     content
-                  </LabContent>
-                  <LabMenu>
-                     {tabList}
-                  </LabMenu>
-               </LabContents>
+               <LabContentsComponent
+                  tabList={tabList}
+                  activeTab={activeTab}
+                  lab={lab}
+               />
             </>
          }
       </LabContainer>
@@ -75,46 +71,28 @@ const LabContainer = styled.div`
 `
 const TitleContainer = styled.div`
    padding: 2rem 1.4rem;
-   border-bottom: 1px solid gray;
+   /* border-bottom: 1px solid gray; */
 `
 const Title = styled.div`
    font-size: 2rem;
    font-weight: bold;
 `
 
-const LabContents = styled.div`
-   display: flex;
-
-`
-const LabContent = styled.div`
-   flex: 4 0 0;
-   margin-top: 1rem;
-   padding-left: 2rem;
-   padding-right: 1rem;
-   padding-bottom: 2rem;
-`
-const LabMenu = styled.div`
-   display: flex;
-   flex-direction: column;
-   flex: 1 0 0;
-   margin-top: 1rem;
-   padding-left: 1rem;
-   padding-top: 0.5rem;
-   border-left: 1px solid gray;
-   min-height: 60vh;
-`
 const MenuOption = styled.div`
+   padding-left: 10px;
    cursor: pointer;
    + * {
       margin-top: 1rem;
    }
    &:hover {
-      color: dimgray;
+      color:  rgb(245, 122, 56);
    }
 `
 const ActiveMenuOption = styled.div`
+   padding-left: 6px;
+   border-left: 4px solid rgb(245, 122, 56);
    font-weight: bold;
-   color: rgb(220, 99, 80);
+   color:black;
    + * {
       margin-top: 1rem;
    }
