@@ -13,6 +13,10 @@ overview:
   services:
     - S3
     - CloudFront
+testData:
+  tag: "s3-website"
+  testParams:
+    - s3BucketName
 testGroups:
   - id: S3BucketTests
     title: S3 Website Bucket Configuration

@@ -11,7 +11,7 @@ export interface AuthInfo {
 }
 
 const httpLink = createHttpLink({
-   uri: 'https://kktqaxbo5e.execute-api.us-east-1.amazonaws.com/prod/graphql',
+   uri: 'https://api.aws-journey.net/graphql',
 });
 
 class AuthStore {

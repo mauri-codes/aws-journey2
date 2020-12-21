@@ -29,6 +29,10 @@ interface LabData {
       title: string
       location: string
    }
+   testData: {
+      tag: string
+      params: string[]
+   }
    overview: {
       Description: string
       Goals: string[]
@@ -42,10 +46,10 @@ const args = minimist(process.argv.slice(2))
 
 const labData: LabData = yamlLoad(fs.readFileSync(path.join(__dirname, `labs/${args.lab}.yaml`), 'utf8')) as LabData
 
-const { lab, info, overview, testGroups } = labData
+const { lab, info, overview, testGroups, testData } = labData
 const pk = `lab_${lab}`
 
-const tests = labData.testGroups.map(testGroup => ({
+const tests = testGroups.map(testGroup => ({
    pk, sk: `testgroup_${testGroup.id}`,
    ...testGroup
 }))
@@ -56,6 +60,9 @@ const records = [{
 }, {
    pk, sk: "overview",
    ...overview
+}, {
+   pk, sk: "testData",
+   ...testData
 },
 ...tests
 ]

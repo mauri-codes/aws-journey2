@@ -1,11 +1,12 @@
 import * as cdk from '@aws-cdk/core';
-import { Certificate, CertificateValidation } from '@aws-cdk/aws-certificatemanager';
+import { Certificate, CertificateValidation, ICertificate } from '@aws-cdk/aws-certificatemanager';
 import { HostedZone, IHostedZone } from '@aws-cdk/aws-route53';
 
 class AWSJourneyCertificate extends cdk.Construct {
    domain = 'aws-journey.net'
    certificateArn: string = ""
    hostedZone: IHostedZone
+   certificate: ICertificate
    constructor(scope: cdk.Construct, id: string, {prefix}: {prefix: string}) {
       super(scope, id);
       this.hostedZone = HostedZone.fromLookup(scope,
@@ -18,6 +19,7 @@ class AWSJourneyCertificate extends cdk.Construct {
          domainName: `${prefix}.${this.domain}`,
          validation: CertificateValidation.fromDns(this.hostedZone),
       });
+      this.certificate = certificate
       this.certificateArn = certificate.certificateArn
    }
 }
