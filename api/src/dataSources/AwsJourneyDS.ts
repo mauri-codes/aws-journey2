@@ -1,5 +1,11 @@
 import { DynamoDataSource, DynamoRecord } from "./DynamoDS";
-import { Lab, Overview, TestSection, LabResponse } from "../generated/graphql";
+import { Lab, Overview, TestSection, LabResponse, AwsCredentials } from "../generated/graphql";
+
+interface ResponseState {
+   success: boolean
+   message?: string
+   data?: Object
+}
 
 type OverviewRecord = DynamoRecord & Overview
 type TestSectionRecord = DynamoRecord & TestSection
@@ -7,9 +13,28 @@ type LabRecord = DynamoRecord & Lab
 
 type Record = OverviewRecord | TestSectionRecord | LabRecord | null | undefined
 
-class AWSJourneyDataSource extends DynamoDataSource{
+class AWSJourneyDataSource extends DynamoDataSource {
    constructor() {
       super('aws-journey', 'pk')
+   }
+   async setAWSCredentials(credentials: AwsCredentials, user: string) {
+      let record = {
+         pk: `user_${user}#credentials`,
+         sk: "main",
+         credentials
+      }
+      try {
+         let result = await this.put(record)
+      }
+      catch (e){
+         console.log(e)
+      }
+      
+      
+      let response: ResponseState = {
+         success: true
+      }
+      return response
    }
    async getLab(id: string) {
       let labData = {}

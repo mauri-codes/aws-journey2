@@ -1,10 +1,10 @@
-import { AWSJourneyDataSource } from "./AwsJourneyDS";
+import { AWSJourneyDataSource } from "./AwsJourneyDS"
 
 
 export interface Context {
    dataSources: {
-      AWSJourney: AWSJourneyDataSource;
-   };
+      AWSJourney: AWSJourneyDataSource
+   }
 }
 const dataSources = (): Context['dataSources'] => {
    return {

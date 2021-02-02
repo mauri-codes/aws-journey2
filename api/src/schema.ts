@@ -6,6 +6,7 @@ const appSchema = gql`
    }
    type Mutation {
       setLab(lab: setLabInput, overview:setOverviewInput, test:setTestInput): Lab
+      setAWSCredentials(credentials: SetCredentialsInput): ResponseState
    }
    type Lab {
       id: ID!
@@ -34,6 +35,14 @@ const appSchema = gql`
       title: String
       tests: [Test]
       errors: [TestError]
+   }
+   input SetCredentialsInput {
+      accessKeyId: String
+      secret: String
+   }
+   type AWSCredentials {
+      accessKeyId: String
+      secret: String
    }
    input setLabInput {
       id: ID!

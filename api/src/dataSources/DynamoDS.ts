@@ -13,9 +13,8 @@ try {
 }
 
 
-
 const DynamoDB = AWS.DynamoDB
-const dynamo = new DynamoDB.DocumentClient()
+const dynamo = new DynamoDB.DocumentClient({region: "us-east-1"})
 
 export interface DynamoRecord {
    pk?: string
@@ -23,9 +22,9 @@ export interface DynamoRecord {
 }
 
 class DynamoDataSource extends DataSource {
-   tableName
-   pk
-   sk
+   tableName: string
+   pk: string
+   sk: string | undefined
    constructor(tableName: string, pk: string, sk?: string) {
       super()
       this.tableName = tableName
@@ -58,6 +57,13 @@ class DynamoDataSource extends DataSource {
          }
       }
       return dynamo.batchWrite(params).promise()
+   }
+   async put(record: any) {
+      const params = {
+         TableName : this.tableName,
+         Item: record
+      }
+      return dynamo.put(params).promise()
    }
 }
 

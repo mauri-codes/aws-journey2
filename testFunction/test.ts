@@ -14,7 +14,7 @@ interface TestBody {
 export async function handler (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
    const body: TestBody = getBody(event)
    const user = getUser(event)
-   let { lab, testParams} = body
+   let { lab, testParams } = body
    console.log(user, lab)
    console.log(testParams)
 
