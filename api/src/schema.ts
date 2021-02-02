@@ -44,6 +44,11 @@ const appSchema = gql`
       accessKeyId: String
       secret: String
    }
+   type ResponseState {
+      success: Boolean
+      message: String
+      data: String
+   }
    input setLabInput {
       id: ID!
       title: String

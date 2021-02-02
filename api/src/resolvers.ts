@@ -1,10 +1,12 @@
 import { IResolvers } from 'graphql-tools'
-import { AWSJourneyDataSource } from "./dataSources/AwsJourneyDS"
+import { LabSource } from "./dataSources/LabDS"
+import { UserCredentialsSource } from "./dataSources/UserCredentialsDS";
 
 
 interface DataSourcesObject {
     dataSources: {
-        AWSJourney: AWSJourneyDataSource
+        LabSource: LabSource,
+        UserCredentialsSource: UserCredentialsSource
     }
 }
 
@@ -12,15 +14,19 @@ const resolvers: (user: string) => IResolvers = (user) => {
     return {
         Query: {
             getLab: async (_source, {id}, { dataSources }: DataSourcesObject) => {
-                return dataSources.AWSJourney.getLab(id)
+                return dataSources.LabSource.getLab(id)
             }
         },
         Mutation: {
             setLab: async (_source, {lab, overview, test}, { dataSources }: DataSourcesObject) => {
-                return dataSources.AWSJourney.updateLab({...lab, overview, test})
+                return dataSources.LabSource.updateLab({...lab, overview, test})
             },
             setAWSCredentials: async (_source, { credentials }, { dataSources }: DataSourcesObject) => {
-                return dataSources.AWSJourney.setAWSCredentials(credentials, user)
+                try {
+                    return dataSources.UserCredentialsSource.setAWSCredentials(credentials, user)
+                } catch (e) {
+                    console.log(e)
+                }
             }
         }
     }

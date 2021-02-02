@@ -39,7 +39,7 @@ export type MutationSetLabArgs = {
 
 
 export type MutationSetAwsCredentialsArgs = {
-  credentials?: Maybe<SetAwsCredentialsInput>;
+  credentials?: Maybe<SetCredentialsInput>;
 };
 
 export type Lab = {
@@ -82,8 +82,7 @@ export type TestGroup = {
   errors?: Maybe<Array<Maybe<TestError>>>;
 };
 
-export type SetAwsCredentialsInput = {
-  __typename?: 'setAWSCredentialsInput';
+export type SetCredentialsInput = {
   accessKeyId?: Maybe<Scalars['String']>;
   secret?: Maybe<Scalars['String']>;
 };
@@ -98,6 +97,7 @@ export type ResponseState = {
   __typename?: 'ResponseState';
   success?: Maybe<Scalars['Boolean']>;
   message?: Maybe<Scalars['String']>;
+  data?: Maybe<Scalars['String']>;
 };
 
 export type SetLabInput = {
@@ -210,7 +210,7 @@ export type ResolversTypes = {
   TestError: ResolverTypeWrapper<TestError>;
   Test: ResolverTypeWrapper<Test>;
   TestGroup: ResolverTypeWrapper<TestGroup>;
-  setAWSCredentialsInput: ResolverTypeWrapper<SetAwsCredentialsInput>;
+  SetCredentialsInput: SetCredentialsInput;
   AWSCredentials: ResolverTypeWrapper<AwsCredentials>;
   ResponseState: ResolverTypeWrapper<ResponseState>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -232,7 +232,7 @@ export type ResolversParentTypes = {
   TestError: TestError;
   Test: Test;
   TestGroup: TestGroup;
-  setAWSCredentialsInput: SetAwsCredentialsInput;
+  SetCredentialsInput: SetCredentialsInput;
   AWSCredentials: AwsCredentials;
   ResponseState: ResponseState;
   Boolean: Scalars['Boolean'];
@@ -291,12 +291,6 @@ export type TestGroupResolvers<ContextType = Context, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SetAwsCredentialsInputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['setAWSCredentialsInput'] = ResolversParentTypes['setAWSCredentialsInput']> = {
-  accessKeyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  secret?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type AwsCredentialsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AWSCredentials'] = ResolversParentTypes['AWSCredentials']> = {
   accessKeyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   secret?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -306,6 +300,7 @@ export type AwsCredentialsResolvers<ContextType = Context, ParentType extends Re
 export type ResponseStateResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ResponseState'] = ResolversParentTypes['ResponseState']> = {
   success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -325,7 +320,6 @@ export type Resolvers<ContextType = Context> = {
   TestError?: TestErrorResolvers<ContextType>;
   Test?: TestResolvers<ContextType>;
   TestGroup?: TestGroupResolvers<ContextType>;
-  setAWSCredentialsInput?: SetAwsCredentialsInputResolvers<ContextType>;
   AWSCredentials?: AwsCredentialsResolvers<ContextType>;
   ResponseState?: ResponseStateResolvers<ContextType>;
   LabResponse?: LabResponseResolvers<ContextType>;

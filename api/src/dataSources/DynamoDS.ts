@@ -39,7 +39,11 @@ class DynamoDataSource extends DataSource {
             [`:${this.pk}`]: key
          }
       }
-      return dynamo.query(params).promise()
+      let queryResult = (await dynamo.query(params).promise())["Items"]
+      if (queryResult && queryResult.length == 0) {
+         throw 'No record found';
+      }
+      return queryResult
    }
    async batchUpdate(records:any[]) {
       records = records.map(record => {
