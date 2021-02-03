@@ -87,6 +87,7 @@ export class ApiStack extends cdk.Stack {
       const dynamoStatement = new PolicyStatement({effect: Effect.ALLOW})
       dynamoStatement.addActions(
          "dynamodb:BatchWriteItem",
+         "dynamodb:DeleteItem",
          "dynamodb:UpdateItem",
          "dynamodb:GetItem",
          "dynamodb:PutItem",

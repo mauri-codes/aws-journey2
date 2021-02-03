@@ -16,29 +16,11 @@ class LabSource extends DynamoDataSource {
    async getLab(id: string) {
       let labData = {}
       let queryResult = await this.query(`lab_${id}`)
-      let testGroups: any[] = []
-      queryResult = queryResult?.flatMap(record => {
-         if (record["sk"].startsWith("testgroup")) {
-            delete record.sk
-            delete record.pk
-            testGroups.push(record)
-            return []
-         }
-         return [record]
-      })
-      let summaryLab = queryResult?.reduce((acc, item) => {
-         let location = "data"
-         if (item["sk"] == "overview") {
-            location = "overview"
-         } if (item["sk"] == "data") {
-            location = "data"
-            item["id"] = id
-         }
-         delete item.sk
-         delete item.pk
-         acc[location] = item
-         return acc
-      }, {})
+      if (queryResult?.length === 0) {
+         throw "No record found"
+      }
+      let testGroups: any[] = getTestGroups()
+      let summaryLab = getSummaryLab()
       if (testGroups.length != 0 && summaryLab) {
          summaryLab["testSection"] = {
             testGroups
@@ -51,6 +33,35 @@ class LabSource extends DynamoDataSource {
       return {
          success: true,
          lab
+      }
+      function getTestGroups() {
+         let testGroups: any[] = []
+         queryResult = queryResult?.flatMap(record => {
+            if (record["sk"].startsWith("testgroup")) {
+               delete record.sk
+               delete record.pk
+               testGroups.push(record)
+               return []
+            }
+            return [record]
+         })
+         return testGroups
+      }
+      function getSummaryLab() {
+         let summaryLab = queryResult?.reduce((acc, item) => {
+               let location = "data"
+               if (item["sk"] == "overview") {
+                  location = "overview"
+               } if (item["sk"] == "data") {
+                  location = "data"
+                  item["id"] = id
+               }
+               delete item.sk
+               delete item.pk
+               acc[location] = item
+               return acc
+            }, {})
+         return summaryLab
       }
    }
    async updateLab(lab: Lab) {

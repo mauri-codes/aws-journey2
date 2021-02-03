@@ -5,13 +5,6 @@ import { dataSources } from "./src/dataSources/rootDS"
 import { APIGatewayProxyEvent, Context, Callback, APIGatewayProxyResult } from "aws-lambda"
 
 let handler = (event: APIGatewayProxyEvent, context: Context, callback: Callback<APIGatewayProxyResult>) => {
-    // context.callbackWaitsForEmptyEventLoop = false
-    console.log("-----------event----------")
-    console.log(JSON.stringify(event));
-    
-    console.log("-----------context----------")
-    console.log(JSON.stringify(context));
-    
     let user = (event.requestContext.authorizer || {})["claims"]["cognito:username"]
     const server = new ApolloServer({
         typeDefs: appSchema,

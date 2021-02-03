@@ -40,9 +40,9 @@ class DynamoDataSource extends DataSource {
          }
       }
       let queryResult = (await dynamo.query(params).promise())["Items"]
-      if (queryResult && queryResult.length == 0) {
-         throw 'No record found';
-      }
+      // if (queryResult && queryResult.length == 0) {
+      //    throw 'No record found';
+      // }
       return queryResult
    }
    async batchUpdate(records:any[]) {
@@ -68,6 +68,13 @@ class DynamoDataSource extends DataSource {
          Item: record
       }
       return dynamo.put(params).promise()
+   }
+   async delete(record: DynamoRecord) {
+      const params = {
+         TableName : this.tableName,
+         Key: record
+      };
+      return dynamo.delete(params).promise()
    }
 }
 

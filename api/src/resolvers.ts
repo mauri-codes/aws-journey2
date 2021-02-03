@@ -15,6 +15,9 @@ const resolvers: (user: string) => IResolvers = (user) => {
         Query: {
             getLab: async (_source, {id}, { dataSources }: DataSourcesObject) => {
                 return dataSources.LabSource.getLab(id)
+            },
+            getAWSCredentials: async (_source, {}, { dataSources }: DataSourcesObject) => {
+                return dataSources.UserCredentialsSource.getAWSCredentials(user)
             }
         },
         Mutation: {
@@ -22,11 +25,10 @@ const resolvers: (user: string) => IResolvers = (user) => {
                 return dataSources.LabSource.updateLab({...lab, overview, test})
             },
             setAWSCredentials: async (_source, { credentials }, { dataSources }: DataSourcesObject) => {
-                try {
-                    return dataSources.UserCredentialsSource.setAWSCredentials(credentials, user)
-                } catch (e) {
-                    console.log(e)
-                }
+                return dataSources.UserCredentialsSource.setAWSCredentials(credentials, user)
+            },
+            deleteAWSCredentials: async (_source, { credentials }, { dataSources }: DataSourcesObject) => {
+                return dataSources.UserCredentialsSource.deleteAWSCredentials(credentials, user)
             }
         }
     }

@@ -3,10 +3,12 @@ import { gql } from 'apollo-server-lambda'
 const appSchema = gql`
    type Query {
       getLab(id: ID!): LabResponse
+      getAWSCredentials(user: String): AWSCredentialsResponse
    }
    type Mutation {
       setLab(lab: setLabInput, overview:setOverviewInput, test:setTestInput): Lab
       setAWSCredentials(credentials: SetCredentialsInput): ResponseState
+      deleteAWSCredentials(credentials: DeleteCredentialsInput): ResponseState
    }
    type Lab {
       id: ID!
@@ -39,10 +41,19 @@ const appSchema = gql`
    input SetCredentialsInput {
       accessKeyId: String
       secret: String
+      name: String
+   }
+   input DeleteCredentialsInput {
+      name: String
+   }
+   type AWSCredentialsResponse {
+      success: Boolean
+      credentialsGroup: [AWSCredentials]
    }
    type AWSCredentials {
       accessKeyId: String
       secret: String
+      name: String
    }
    type ResponseState {
       success: Boolean

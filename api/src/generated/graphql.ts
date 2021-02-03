@@ -17,6 +17,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   getLab?: Maybe<LabResponse>;
+  getAWSCredentials?: Maybe<AwsCredentialsResponse>;
 };
 
 
@@ -24,10 +25,16 @@ export type QueryGetLabArgs = {
   id: Scalars['ID'];
 };
 
+
+export type QueryGetAwsCredentialsArgs = {
+  user?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   setLab?: Maybe<Lab>;
   setAWSCredentials?: Maybe<ResponseState>;
+  deleteAWSCredentials?: Maybe<ResponseState>;
 };
 
 
@@ -40,6 +47,11 @@ export type MutationSetLabArgs = {
 
 export type MutationSetAwsCredentialsArgs = {
   credentials?: Maybe<SetCredentialsInput>;
+};
+
+
+export type MutationDeleteAwsCredentialsArgs = {
+  credentials?: Maybe<DeleteCredentialsInput>;
 };
 
 export type Lab = {
@@ -85,12 +97,24 @@ export type TestGroup = {
 export type SetCredentialsInput = {
   accessKeyId?: Maybe<Scalars['String']>;
   secret?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type DeleteCredentialsInput = {
+  name?: Maybe<Scalars['String']>;
+};
+
+export type AwsCredentialsResponse = {
+  __typename?: 'AWSCredentialsResponse';
+  success?: Maybe<Scalars['Boolean']>;
+  credentialsGroup?: Maybe<Array<Maybe<AwsCredentials>>>;
 };
 
 export type AwsCredentials = {
   __typename?: 'AWSCredentials';
   accessKeyId?: Maybe<Scalars['String']>;
   secret?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type ResponseState = {
@@ -202,18 +226,20 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   Mutation: ResolverTypeWrapper<{}>;
   Lab: ResolverTypeWrapper<Lab>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Overview: ResolverTypeWrapper<Overview>;
   TestSection: ResolverTypeWrapper<TestSection>;
   TestError: ResolverTypeWrapper<TestError>;
   Test: ResolverTypeWrapper<Test>;
   TestGroup: ResolverTypeWrapper<TestGroup>;
   SetCredentialsInput: SetCredentialsInput;
+  DeleteCredentialsInput: DeleteCredentialsInput;
+  AWSCredentialsResponse: ResolverTypeWrapper<AwsCredentialsResponse>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AWSCredentials: ResolverTypeWrapper<AwsCredentials>;
   ResponseState: ResolverTypeWrapper<ResponseState>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   setLabInput: SetLabInput;
   setOverviewInput: SetOverviewInput;
   setTestInput: SetTestInput;
@@ -224,18 +250,20 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Query: {};
   ID: Scalars['ID'];
+  String: Scalars['String'];
   Mutation: {};
   Lab: Lab;
-  String: Scalars['String'];
   Overview: Overview;
   TestSection: TestSection;
   TestError: TestError;
   Test: Test;
   TestGroup: TestGroup;
   SetCredentialsInput: SetCredentialsInput;
+  DeleteCredentialsInput: DeleteCredentialsInput;
+  AWSCredentialsResponse: AwsCredentialsResponse;
+  Boolean: Scalars['Boolean'];
   AWSCredentials: AwsCredentials;
   ResponseState: ResponseState;
-  Boolean: Scalars['Boolean'];
   setLabInput: SetLabInput;
   setOverviewInput: SetOverviewInput;
   setTestInput: SetTestInput;
@@ -244,11 +272,13 @@ export type ResolversParentTypes = {
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getLab?: Resolver<Maybe<ResolversTypes['LabResponse']>, ParentType, ContextType, RequireFields<QueryGetLabArgs, 'id'>>;
+  getAWSCredentials?: Resolver<Maybe<ResolversTypes['AWSCredentialsResponse']>, ParentType, ContextType, RequireFields<QueryGetAwsCredentialsArgs, never>>;
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   setLab?: Resolver<Maybe<ResolversTypes['Lab']>, ParentType, ContextType, RequireFields<MutationSetLabArgs, never>>;
   setAWSCredentials?: Resolver<Maybe<ResolversTypes['ResponseState']>, ParentType, ContextType, RequireFields<MutationSetAwsCredentialsArgs, never>>;
+  deleteAWSCredentials?: Resolver<Maybe<ResolversTypes['ResponseState']>, ParentType, ContextType, RequireFields<MutationDeleteAwsCredentialsArgs, never>>;
 };
 
 export type LabResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Lab'] = ResolversParentTypes['Lab']> = {
@@ -291,9 +321,16 @@ export type TestGroupResolvers<ContextType = Context, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AwsCredentialsResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AWSCredentialsResponse'] = ResolversParentTypes['AWSCredentialsResponse']> = {
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  credentialsGroup?: Resolver<Maybe<Array<Maybe<ResolversTypes['AWSCredentials']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type AwsCredentialsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AWSCredentials'] = ResolversParentTypes['AWSCredentials']> = {
   accessKeyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   secret?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -320,6 +357,7 @@ export type Resolvers<ContextType = Context> = {
   TestError?: TestErrorResolvers<ContextType>;
   Test?: TestResolvers<ContextType>;
   TestGroup?: TestGroupResolvers<ContextType>;
+  AWSCredentialsResponse?: AwsCredentialsResponseResolvers<ContextType>;
   AWSCredentials?: AwsCredentialsResolvers<ContextType>;
   ResponseState?: ResponseStateResolvers<ContextType>;
   LabResponse?: LabResponseResolvers<ContextType>;
