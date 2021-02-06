@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from "aws-lambda"
 import { DynamoDB } from 'aws-sdk';
 
-const dynamo = new DynamoDB.DocumentClient()
+const dynamo = new DynamoDB.DocumentClient({region: "us-east-1"})
 const tableName = "aws-journey"
 
 interface TestBody {
@@ -9,14 +9,31 @@ interface TestBody {
    testParams: {
       [key: string]: string
    }
+   credentialsLabel: string
 }
 
-export async function handler (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
-   const body: TestBody = getBody(event)
-   const user = getUser(event)
-   let { lab, testParams } = body
-   console.log(user, lab)
-   console.log(testParams)
+interface TestParams {
+   [key: string]: string
+}
+
+interface Credentials {
+   credentials: {
+      accessKeyId: string
+      secret: string
+   }
+}
+
+function validate (params: any[]) {
+   params.forEach (param => {
+      let [value, label] = param
+      if (value == null) {
+         throw `param ${label} not provided`
+      }
+   })
+}
+
+async function runTests(user: string, lab: string, testParams: TestParams, credentialsLabel: string) {
+   let { credentials }: Credentials = await getCredentials(user, credentialsLabel) as Credentials
 
    const [testGroups, testData, labData] = await getLabData(lab)
 
@@ -24,32 +41,85 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
       const { tag, testParams: params } = testData
       const { location } = labData
       const { testSuite } = await import(`./tests/${location}/${lab}`)
-      if ( testParams != null ) {
+      if ( testParams == null ) {
          testParams = {}
       }
       let allParams = params.every((param: string) => testParams[param] != null)
-      console.log("all Params -> " + allParams)
-      const testSuiteParams = {
-         ...testParams,
-         tag: {Key: "journey", Value: tag}
+      if (!allParams) {
+         throw "Parameters missing in testParams"
       }
-      const tests = new testSuite(testSuiteParams)
+      const tests = new testSuite(
+         testParams,
+         { Key: "journey", Value: tag },
+         {
+            region: testParams.region,
+            credentials: {
+               id: credentials.accessKeyId,
+               secret: credentials.secret
+            }
+         }
+      )
       const testResult = await tests.run()
       console.log(JSON.stringify(testResult))
+      return testResult
+   } else {
+      throw "internal error"
    }
+}
 
-   return {
-      statusCode: 200,
-      body: JSON.stringify({
-         message: 'Hello world 3',
-         headers: {
-               "Access-Control-Allow-Headers" : "Content-Type",
-               "Access-Control-Allow-Origin": "*",
-               "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-         },
-         input: event,
-      })
+
+export async function handler (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
+   try {
+      const body: TestBody = getBody(event)
+      const user = getUser(event)
+
+      let { lab, testParams, credentialsLabel } = body
+      validate([[lab, "lab"], [testParams, "testParams"], [credentialsLabel, "credentialsLabel"]])
+
+      let tests = await runTests(user, lab, testParams, credentialsLabel)
+
+      return {
+         statusCode: 200,
+         body: JSON.stringify({
+            message: 'tests runned successfully',
+            headers: {
+                  "Access-Control-Allow-Headers" : "Content-Type",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
+            tests,
+         })
+      }
+
+   } catch (error) {
+      return {
+         statusCode: error.status || 400,
+         body: JSON.stringify({
+            message: error.message,
+            headers: {
+                  "Access-Control-Allow-Headers" : "Content-Type",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
+            input: event,
+         })
+      }
+   }   
+}
+
+async function getCredentials(user: string, credentialsLabel: string) {
+   var params = {
+      TableName : tableName,
+      Key: {
+        pk: `user_${user}#credentials`,
+        sk: credentialsLabel
+      }
+    };
+   let getCredentialsRequest = await dynamo.get(params).promise()
+   if (getCredentialsRequest.Item == null) {
+      throw "No credentials found"
    }
+   return getCredentialsRequest.Item
 }
 
 async function getLabData(lab: string) {
