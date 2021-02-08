@@ -3,7 +3,7 @@ import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
 import { StoreContext } from "../state/RootStore";
 import { AuthInfo } from "../state/AuthStore";
-import Amplify from 'aws-amplify'
+import Amplify, { loadingLogo } from 'aws-amplify'
 import { useRouter } from 'next/router'
 
 Amplify.configure({

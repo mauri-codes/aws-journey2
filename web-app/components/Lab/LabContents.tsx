@@ -11,17 +11,20 @@ interface LabContentsInput {
 }
 function LabContentsComponent ({tabList, activeTab, lab}: LabContentsInput) {
    return (
+      <> 
+         <h1>S3 static Website</h1>
       <LabContents>
-         <LabMenu>
-            {tabList}
-         </LabMenu>
          {activeTab === "Overview" &&
             <OverviewComponent overview={lab.overview} />
          }
          {activeTab === "Tests" &&
             <TestsComponent testSection={lab.testSection} />
          }
+         <LabMenu>
+            {tabList}
+         </LabMenu>
       </LabContents>
+      </>
    )
 }
 
@@ -29,12 +32,10 @@ export { LabContentsComponent }
 
 const LabContents = styled.div`
    display: flex;
-
 `
 
 const LabMenu = styled.div`
    display: flex;
-   background-color: hsl(100, 10%, 93%);
    flex-direction: column;
    flex: 1 0 0;
    padding-left: 1rem;

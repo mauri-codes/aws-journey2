@@ -10,6 +10,10 @@
   "dependencies": {
     "@apollo/client": "^3.3.4",
     "@aws-amplify/ui-react": "^0.2.30",
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "aws-amplify": "^3.3.10",
     "axios": "^0.21.0",
     "graphql": "^15.4.0",

@@ -17,6 +17,16 @@ const mainColor = "hsl(203, 12%, 27%)"
 
 const burgundy = "hsl(348, 92%, 28%)"
 
+// const burntSienna = "hsl(14, 69%, 58%)"
+const almostWhite = "hsl(0, 0, 95)"
+const paradisePink = "hsl(354, 73%, 59%)"
+const paradisePinkBright = "hsl(354, 73%, 90%)"
+const Isabelline = "hsl(40, 86%, 96%)"
+const Linen = "hsl(37, 40%, 90%)"
+const IsabellineBrighter = "hsl(40, 86%, 98%)"
+const DeepSpaceSparkle = "hsl(187, 22, 32)"
+const DarkPurple = "hsl(284, 100, 6)"
+
 const DefaultTheme = {
    fonts: {
       body: 'system-ui, sans-serif',
@@ -24,11 +34,21 @@ const DefaultTheme = {
       monospace: 'Menlo, monospace',
    },
    colors: {
-      background: cultured,
-      primary: mainColor,
-      accent: copper,
+      color2: "hsl(37, 40%, 93%)",
+      background: almostWhite,
+      backgroundBrighter: "hsl(37, 40%, 95%)",
+      primary: paradisePink,
+      primaryBright: paradisePinkBright,
+      accent: DeepSpaceSparkle,
       error: burgundy,
       text: '#000'
+   },
+   header: {
+      hover: {
+         "&:hover": {
+            "color": paradisePink
+         }
+      }
    },
    forms: {
     input: {

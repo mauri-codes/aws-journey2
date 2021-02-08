@@ -3,19 +3,27 @@
 import { jsx } from 'theme-ui'
 import styled from "@emotion/styled"
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
-import { Auth } from 'aws-amplify';
-import { useEffect } from "react";
+import { Auth } from 'aws-amplify'
+import { useEffect } from "react"
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const HeaderComponent = () => {
    useEffect(() => {
       currentSession()
    })
    return (
-      <Header sx={{backgroundColor:"primary"}} >
+      <Header sx={{backgroundColor:"none"}} >
          <Logo>logo</Logo>
          <Nav>
-            <NavLink>
-               Sign Out
+            <NavLink sx={{ variant: 'header.hover' }} >
+               Journeys
+            </NavLink>
+            <NavLink sx={{ variant: 'header.hover' }} >
+               Labs
+            </NavLink>
+            <NavLink sx={{ variant: 'header.hover' }} >
+               thompson <FontAwesomeIcon icon={faAngleDown} />
             </NavLink>
          </Nav>
       </Header>
@@ -31,9 +39,9 @@ const Header = styled.div`
    align-items: center;
    justify-content: space-between;
    position: fixed;
-   height: 4.5rem;
+   height: 4rem;
    width: 100vw;
-   padding: 0 0;   
+   padding: 0 0;
    @media only screen and (max-width: 768px) {
       padding-left: 0;
       padding-right: 0;
@@ -56,19 +64,19 @@ const Nav = styled.div`
    display: flex;
    justify-content: flex-end;
    flex: 1 0 0;
-   color: white;
 `
 
 const NavLink = styled.div`
-   color: white;
-   padding: 0.7rem 2rem;
+   color: black;
+   padding: 0.7rem 1rem;
+
    cursor: pointer;
-   &:hover {
-      text-decoration: underline;
+   &:last-child {
+      margin-left: 2rem;
    }
-   + * {
+   /* + * {
       margin-left: 1rem;
-   }
+   } */
 `
 
 export { HeaderComponent }

@@ -1,9 +1,14 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from 'theme-ui'
 import { Overview } from "../../types";
 import { LabContent, SubTitle, ContentHeader } from "./styled";
 
 function OverviewComponent ({overview}: {overview: Overview}) {
    return (
-      <LabContent>
+      <LabContent
+      //  sx={{backgroundColor: "backgroundBrighter"}}
+       >
          <SubTitle>Overview</SubTitle>
          <p>{overview.description}</p>
          <ContentHeader>Goals</ContentHeader>

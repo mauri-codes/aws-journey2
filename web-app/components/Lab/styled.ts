@@ -3,8 +3,7 @@ import styled from "@emotion/styled"
 
 const LabContent = styled.div`
    flex: 4 0 0;
-   background-color:hsl(100, 10%, 95%);
-   padding-left: 2rem;
+   margin-right: 1rem;
    padding-top: 1rem;
    padding-right: 1rem;
    padding-bottom: 2rem;

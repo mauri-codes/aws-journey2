@@ -1,3 +1,6 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from 'theme-ui'
 import { useRouter } from 'next/router'
 import { useEffect, useContext, useState } from "react"
 import { getLabQuery } from "../../queries/lab"
@@ -17,9 +20,13 @@ export default function  Lab () {
    const tabs = ["Overview", "Tests"]
    const tabList = tabs.map((tab: Tabs) => {
       if (tab === activeTab) {
-         return <ActiveMenuOption key={tab}>{tab}</ActiveMenuOption>
+         return <ActiveMenuOption
+            sx={{borderColor: "primary"}}
+            key={tab}
+         >{tab}</ActiveMenuOption>
       } else {
          return <MenuOption
+            sx={{"&:hover": {color:  "primary"}, "borderColor": "primaryBright"}}
             key={tab}
             onClick={() => setActiveTab(tab)}
             >{tab}</MenuOption>
@@ -47,7 +54,7 @@ export default function  Lab () {
    return (
       <LabContainer>
          {lab &&
-            <>
+            <div>
                <TitleContainer>
                   <Title>
                      {lab.title}
@@ -58,7 +65,7 @@ export default function  Lab () {
                   activeTab={activeTab}
                   lab={lab}
                />
-            </>
+            </div>
          }
       </LabContainer>
    )
@@ -79,21 +86,29 @@ const Title = styled.div`
 `
 
 const MenuOption = styled.div`
-   padding-left: 10px;
+   display: flex;
+   align-items: center;
+   padding-left: 15px;
+   height: 2.5rem;
+   border-left-style: solid;
+   border-left-width: 8px;
+   border-color: gray;
    cursor: pointer;
-   + * {
-      margin-top: 1rem;
-   }
-   &:hover {
-      color:  rgb(245, 122, 56);
-   }
+   /* + * {
+      margin-top: 0.5rem;
+   } */
 `
 const ActiveMenuOption = styled.div`
-   padding-left: 6px;
-   border-left: 4px solid rgb(245, 122, 56);
+   display: flex;
+   align-items: center;
+   cursor: default;
+   border-left-style: solid;
+   border-left-width: 8px;
+   height: 2.5rem;
+   padding-left: 15px;
    font-weight: bold;
    color:black;
-   + * {
-      margin-top: 1rem;
-   }
+   /* + * {
+      margin-top: 0.5rem;
+   } */
 `
