@@ -18,7 +18,7 @@ const mainColor = "hsl(203, 12%, 27%)"
 const burgundy = "hsl(348, 92%, 28%)"
 
 // const burntSienna = "hsl(14, 69%, 58%)"
-const almostWhite = "hsl(0, 0, 95)"
+const almostWhite = "hsl(0, 0%, 95%)"
 const paradisePink = "hsl(354, 73%, 59%)"
 const paradisePinkBright = "hsl(354, 73%, 90%)"
 const Isabelline = "hsl(40, 86%, 96%)"

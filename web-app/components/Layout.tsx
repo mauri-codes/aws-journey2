@@ -7,13 +7,14 @@ import { HeaderComponent } from "./Header"
 import { observer } from "mobx-react"
 import { AuthenticatorComponent } from "./Authenticator"
 import { StoreContext } from "../state/RootStore"
+import { pageActions } from "../events/publishers";
 
 
 const LayoutComponent = observer(({children}) => {
    const { authStore } = useContext(StoreContext)
    authStore.setCurrentSession()
    return (
-      <div>
+      <div onClick={pageClick}>
          <AuthenticatorComponent>
             <HeaderComponent />
             <Content sx={{backgroundColor: "background"}}>
@@ -21,8 +22,11 @@ const LayoutComponent = observer(({children}) => {
             </Content>
          </AuthenticatorComponent>
       </div>
-   )}    
-)
+   )
+   function pageClick () {
+      pageActions.next("clicked")
+   }
+})
 
 export { LayoutComponent }
 
