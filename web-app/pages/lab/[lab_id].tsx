@@ -21,12 +21,12 @@ export default function  Lab () {
    const tabList = tabs.map((tab: Tabs) => {
       if (tab === activeTab) {
          return <ActiveMenuOption
-            sx={{borderColor: "primary"}}
+            sx={{borderColor: "primary", fontFamily: "bodyBold"}}
             key={tab}
          >{tab}</ActiveMenuOption>
       } else {
          return <MenuOption
-            sx={{"&:hover": {color:  "primary"}, "borderColor": "primaryBright"}}
+            sx={{"&:hover": {color:  "primary"}, borderColor: "primaryBright", fontFamily: "body"}}
             key={tab}
             onClick={() => setActiveTab(tab)}
             >{tab}</MenuOption>
@@ -88,6 +88,7 @@ const Title = styled.div`
 const MenuOption = styled.div`
    display: flex;
    align-items: center;
+   font-size: 1.1rem;
    padding-left: 15px;
    height: 2.5rem;
    border-left-style: solid;
@@ -101,6 +102,7 @@ const MenuOption = styled.div`
 const ActiveMenuOption = styled.div`
    display: flex;
    align-items: center;
+   font-size: 1.1rem;
    cursor: default;
    border-left-style: solid;
    border-left-width: 8px;

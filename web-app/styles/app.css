@@ -1,3 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@font-face {
+    font-family: 'ocr';
+    src: URL('fonts/OCRAEXT.TTF') format('truetype');
+}
+@font-face {
+    font-family: 'palatinoBold';
+    src: URL('fonts/palatinoBold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'palatino';
+    src: URL('fonts/palab.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'himalaya';
+    src: URL('fonts/mshimalaya.ttf') format('truetype');
+}
 :root {
     --amplify-primary-color: #ff6347;
     --amplify-primary-tint: #ff7359;

@@ -21,8 +21,8 @@ const HeaderComponent = () => {
       return () => subscription.unsubscribe()
    }, [])
    return (
-      <Header sx={{backgroundColor:"none"}} >
-         <Logo>logo</Logo>
+      <Header sx={{backgroundColor:"none", fontFamily: "body"}} >
+         <Logo sx={{fontFamily: "ocr", color: "accent"}}><div>AWS Journey</div> </Logo>
          <Nav>
             <NavLink sx={{ variant: 'header.hover' }} >
                Journeys
@@ -67,6 +67,7 @@ const UserMenu = styled.div`
 `
 const UserMenuOption = styled.div`
    padding: 0.5rem 1rem;
+   font-size: 0.9rem;
 `
 
 const Header = styled.div`
@@ -92,8 +93,11 @@ const Header = styled.div`
 `
 
 const Logo = styled.div`
-   flex: 0 0 4.5rem;
+   display: flex;
+   align-items: center;
+   flex: 0 0 10rem;
    height: 100%;
+   font-size: 1.4rem;
 `
 const Nav = styled.div`
    display: flex;
@@ -105,7 +109,7 @@ const NavLink = styled.div`
    position: relative;
    color: black;
    padding: 0.7rem 1rem;
-
+   font-size: 0.9rem;
    cursor: pointer;
    &:last-child {
       margin-left: 2rem;

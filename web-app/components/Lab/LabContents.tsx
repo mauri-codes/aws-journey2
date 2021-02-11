@@ -1,3 +1,6 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from 'theme-ui'
 import styled from "@emotion/styled"
 import { Tabs } from "./styled";
 import { LabData } from "../../types";
@@ -11,8 +14,8 @@ interface LabContentsInput {
 }
 function LabContentsComponent ({tabList, activeTab, lab}: LabContentsInput) {
    return (
-      <> 
-         <h1>S3 static Website</h1>
+      <div>
+         <LabTitle sx={{fontFamily: "title"}}>S3 static Website</LabTitle>
       <LabContents>
          {activeTab === "Overview" &&
             <OverviewComponent overview={lab.overview} />
@@ -24,7 +27,7 @@ function LabContentsComponent ({tabList, activeTab, lab}: LabContentsInput) {
             {tabList}
          </LabMenu>
       </LabContents>
-      </>
+      </div>
    )
 }
 
@@ -32,6 +35,9 @@ export { LabContentsComponent }
 
 const LabContents = styled.div`
    display: flex;
+`
+const LabTitle = styled.h1`
+   text-align: center;
 `
 
 const LabMenu = styled.div`

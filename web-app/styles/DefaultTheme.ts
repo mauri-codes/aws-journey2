@@ -29,8 +29,11 @@ const DarkPurple = "hsl(284, 100, 6)"
 
 const DefaultTheme = {
    fonts: {
-      body: 'system-ui, sans-serif',
-      heading: '"Avenir Next", sans-serif',
+      body: 'palatino, sans-serif',
+      bodyBold: 'palatinoBold, sans-serif',
+      subTitle: 'Poppins, sans-serif',
+      logo: 'ocr, monospace',
+      title: 'Poppins, sans-serif',
       monospace: 'Menlo, monospace',
    },
    colors: {
