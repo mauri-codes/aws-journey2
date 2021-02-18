@@ -4,12 +4,14 @@ import { jsx } from 'theme-ui'
 import styled from "@emotion/styled"
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { Auth } from 'aws-amplify'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from "react"
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { pageActions } from "../events/publishers";
 
 const HeaderComponent = () => {
+   const router = useRouter()
    let [ userMenu, setUserMenu ] = useState<boolean>(false)
    useEffect(() => {
       currentSession()
@@ -36,7 +38,9 @@ const HeaderComponent = () => {
                </div>
                {userMenu &&
                   <UserMenu sx={{ backgroundColor: "background", borderColor: "primary" }}>
-                     <UserMenuOption sx={{"&:hover": { backgroundColor: "primaryBright"}}}> Profile </UserMenuOption>
+                     <UserMenuOption sx={{"&:hover": { backgroundColor: "primaryBright"}}} onClick={() => router.push("/profile")}>
+                        Profile
+                     </UserMenuOption>
                      <UserMenuOption sx={{"&:hover": { backgroundColor: "primaryBright"}}}> Credentials </UserMenuOption>
                      <UserMenuOption sx={{"&:hover": { backgroundColor: "primaryBright"}}}> Sign Out </UserMenuOption>
                   </UserMenu>
