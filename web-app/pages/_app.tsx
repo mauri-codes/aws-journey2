@@ -5,6 +5,7 @@ import { GlobalStyles } from "../styles/GlobalStyles"
 import { LayoutComponent } from "../components/Layout"
 import { Store, StoreContext } from "../state/RootStore"
 import '../styles/app.css'
+import 'fontsource-roboto'
 
 function MyApp({ Component, pageProps }) {
    return (

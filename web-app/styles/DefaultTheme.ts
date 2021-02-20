@@ -29,8 +29,8 @@ const DarkPurple = "hsl(284, 100, 6)"
 
 const DefaultTheme = {
    fonts: {
-      body: 'palatino, sans-serif',
-      bodyBold: 'palatinoBold, sans-serif',
+      body: 'palatino, sans-serif !important',
+      bodyBold: 'palatinoBold, sans-serif !important',
       subTitle: 'Poppins, sans-serif',
       logo: 'ocr, monospace',
       title: 'Poppins, sans-serif',
