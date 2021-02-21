@@ -1,5 +1,3 @@
-
-
 export interface Error {
    code: string
    message: string
@@ -31,4 +29,10 @@ export interface LabData {
    title
    overview: Overview
    testSection: TestSection
+}
+
+export interface AWSCredential {
+   name?: string
+   secret?: string
+   accessKeyId?: string
 }

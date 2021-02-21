@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { Auth } from 'aws-amplify';
 
@@ -19,7 +19,7 @@ class AuthStore {
    idToken: string | null
    username: string | null
    email: string | null
-   apolloClient: any
+   apolloClient: ApolloClient<NormalizedCacheObject>
    constructor() {
       makeAutoObservable(this)
    }
@@ -66,7 +66,7 @@ class AuthStore {
       this.apolloClient = new ApolloClient({
          link: authLink.concat(httpLink),
          cache: new InMemoryCache()
-      })       
+      })
    }
 }
 
