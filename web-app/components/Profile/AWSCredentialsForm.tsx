@@ -54,12 +54,11 @@ export default function AWSCredentialsForm (
          allValidInputs = validInputs.name.valid && validInputs.accessKeyId.valid && validInputs.secret.valid
       }
       const noEmptyInputs = newCredentials.name != "" && newCredentials.accessKeyId != "" && newCredentials.secret != ""
-      
       return allValidInputs && noEmptyInputs
    }
    const [ newCredentials, setNewCredentials ] = useState(emptyAWSCredentials)
    function updateInputValidation(credentials: AWSCredential) {
-      setValidInputs({
+      let inputSummary = {
          name: {
             valid: isAlphanumeric.test(credentials.name),
             message: "Name should only contain Alphanumeric characters"
@@ -72,7 +71,8 @@ export default function AWSCredentialsForm (
             valid: isAwsSecret.test(credentials.secret) || credentials.secret == "",
             message: "Not a valid AWS Secret Access Key"
          }
-      })
+      }
+      setValidInputs(inputSummary)
    }
    function updateNewCredentialsField(data: AWSCredential) {
       const updatedCredentials = {...newCredentials, ...data}

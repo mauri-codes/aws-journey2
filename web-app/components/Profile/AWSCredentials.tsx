@@ -38,6 +38,11 @@ export default function AWSCredentialsComponent () {
       }
    }
 
+   function deleteCredentialsRecord(name: string) {
+      const newCredentialsList = credentialsList.filter(credentials => credentials.name != name)
+      setCredentialsList(newCredentialsList)
+   }
+
    function addCredentialsRecord(credentials: AWSCredential) {
       credentials.accessKeyId = `${credentials.accessKeyId.substring(0,5)}****************`
       const newCredentialsList = [ ...credentialsList, credentials ]
@@ -75,7 +80,10 @@ export default function AWSCredentialsComponent () {
             }
             {credentialsList != null &&
                <CredentialsContainer>
-                  <CredentialsTableComponent credentialsList={credentialsList} />
+                  <CredentialsTableComponent
+                     credentialsList={credentialsList}
+                     deleteCredentialsRecord={deleteCredentialsRecord}
+                  />
                </CredentialsContainer>
          }
       </UserAWSCredentials>

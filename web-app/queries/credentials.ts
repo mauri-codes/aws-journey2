@@ -27,4 +27,15 @@ const setAWSCredentials = (credentials: AWSCredential) => {
    `
 }
 
-export { getCredentialsList, setAWSCredentials }
+const deleteAWSCredentials = (name: string) => {
+   return gql`
+      mutation deleteAWSCredentials {
+         deleteAWSCredentials(credentials: {name: "${name}"}) {
+            success
+            message
+         }
+      }
+   `
+}
+
+export { getCredentialsList, setAWSCredentials, deleteAWSCredentials }
