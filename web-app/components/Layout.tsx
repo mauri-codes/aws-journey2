@@ -9,7 +9,7 @@ import { AuthenticatorComponent } from "./Authenticator"
 import { StoreContext } from "../state/RootStore"
 import { pageActions } from "../events/publishers"
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles'
-import { theme } from "../styles/materialTheme";
+import { materialTheme } from "../styles/DefaultTheme";
 
 
 const LayoutComponent = observer(({children}) => {
@@ -18,7 +18,7 @@ const LayoutComponent = observer(({children}) => {
    return (
       <div onClick={pageClick}>
          <AuthenticatorComponent>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={materialTheme}>
                <HeaderComponent />
                <Content sx={{backgroundColor: "background"}}>
                   {children}

@@ -1,31 +1,17 @@
-const cultured = "hsl(100, 10%, 94%)"
-const xiketic = "hsl(242, 94%, 7%)"
-const vermillon = "hsl(13, 60%, 47%)"
+import { createMuiTheme } from '@material-ui/core/styles';
 
-const deepChampagne = "hsl(32, 92%, 81%)"
-const blackCoffee = "hsl(320, 17%, 17%)"
-const laurenGreen = "hsl(90, 18%, 64%)"
-const crayola = "hsl(229, 100%, 92%)"
+const PrimaryColor = "hsl(31, 79%, 49%)"
+const PrimaryColorLight = "hsl(31, 87%, 80%)"
+const PrimaryColorDark = "hsl(31, 87%, 43%)"
+const SecondaryColor = "hsl(217, 34%, 40%)"
+const SecondaryColorLight = "hsl(217, 34%, 85%)"
+const SecondaryColorDark = "hsl(217, 34%, 34%)"
+const ComplementaryColor = "hsl(24, 37%, 75%)"
+const ErrorColor = "hsl(0, 61%, 50%)"
+const SuccessColor = "hsl(121, 70%, 31%)"
 
-const rouseTaupe = "hsl(10, 23%, 45%)"
-const cadet = "hsl(198, 21%, 39%)"
-
-const copper = "hsl(28, 41%, 51%)"
-
-const mainColor = "hsl(203, 12%, 27%)"
-
-
-const burgundy = "hsl(348, 92%, 28%)"
-
-// const burntSienna = "hsl(14, 69%, 58%)"
 const almostWhite = "hsl(0, 0%, 95%)"
 const paradisePink = "hsl(354, 73%, 59%)"
-const paradisePinkBright = "hsl(354, 73%, 90%)"
-const Isabelline = "hsl(40, 86%, 96%)"
-const Linen = "hsl(37, 40%, 90%)"
-const IsabellineBrighter = "hsl(40, 86%, 98%)"
-const DeepSpaceSparkle = "hsl(187, 22, 32)"
-const DarkPurple = "hsl(284, 100, 6)"
 
 const DefaultTheme = {
    fonts: {
@@ -37,13 +23,13 @@ const DefaultTheme = {
       monospace: 'Menlo, monospace',
    },
    colors: {
-      color2: "hsl(37, 40%, 93%)",
       background: almostWhite,
       backgroundBrighter: "hsl(37, 40%, 95%)",
-      primary: paradisePink,
-      primaryBright: paradisePinkBright,
-      accent: DeepSpaceSparkle,
-      error: burgundy,
+      primary: PrimaryColor,
+      primaryBright: PrimaryColorLight,
+      accent: SecondaryColor,
+      accentBright: SecondaryColorLight,
+      error: ErrorColor ,
       text: '#000'
    },
    header: {
@@ -65,4 +51,33 @@ const DefaultTheme = {
    }
 }
 
-export { DefaultTheme }
+const materialTheme = createMuiTheme({
+   palette: {
+      primary: {
+         light: PrimaryColorLight,
+         main: PrimaryColor,
+         dark: PrimaryColorDark,
+         contrastText: '#fff',
+      },
+      secondary: {
+         light: SecondaryColorLight,
+         main: SecondaryColor,
+         dark: SecondaryColorDark,
+         contrastText: '#fff',
+      },
+      error: {
+         main: ErrorColor
+      },
+      success: {
+         main: SuccessColor
+      }
+   },
+   
+   typography: {
+      button: {
+
+      }
+   }
+ });
+
+export { DefaultTheme, materialTheme, ErrorColor }

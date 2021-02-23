@@ -7,6 +7,7 @@ import { faUser, faKey, faPlane } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StoreContext } from "../state/RootStore"
 import { AWSCredentialsComponent } from "../components/Profile/AWSCredentials";
+import { Person } from '@material-ui/icons';
 
 const MenuOptions = [{
    text: "Profile",
@@ -27,7 +28,7 @@ export default function UserProfile() {
    return (
       <div sx={{fontFamily: "body"}}>
          <User>
-               <UserImage src="user-circle.png" alt="user-image"/>
+               <Person style={{fontSize:100}} color={"secondary"} />
                <UserName sx={{fontFamily: "title"}}> {authStore.username} </UserName>
          </User>
          <Profile>

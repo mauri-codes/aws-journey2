@@ -7,7 +7,7 @@ import {
    Paper, Chip, Icon
 } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { AWSCredential } from "../../types"
 import { StoreContext } from "../../state/RootStore"
 import { IconButton } from '@material-ui/core';
@@ -15,12 +15,28 @@ import { deleteAWSCredentials } from "../../queries/credentials";
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const useStyles = makeStyles({
-   table: {
-     width: "100%",
-     minWidth: "500px"
+const HeaderWithStyles = withStyles(theme => ({
+   root: {
+      backgroundColor: theme.palette.secondary.light
    }
-});
+}))(TableHead)
+
+const TableWithStyles = withStyles(theme => ({
+   root: {
+      width: "100%",
+      minWidth: "500px",
+      border: "2px solid " + theme.palette.secondary.light
+   }
+}))(Table)
+
+const StyledTableRow = withStyles((theme) => ({
+   root: {
+     '&:nth-of-type(odd)': {
+       backgroundColor: "hsl(0, 0%, 90%)",
+     },
+   },
+ }))(TableRow);
+
 
 const NONE = "-1"
 
@@ -36,7 +52,6 @@ export default function CredentialsTableComponent (
 ) {
    const { authStore } = useContext(StoreContext)
    const apolloClient = authStore.apolloClient
-   const classes = useStyles();
    const [ loadingDeletion, setLoadingDeletion ] = useState<string>(NONE)
    async function deleteCredentials(name: string) {
       setLoadingDeletion(name)
@@ -52,17 +67,17 @@ export default function CredentialsTableComponent (
    }
    return (
       <TableContainer component={Paper}>
-      <Table className={classes.table} sx={{backgroundColor: "background"}} aria-label="simple table">
-         <TableHead sx={{backgroundColor: "background"}}>
+      <TableWithStyles sx={{backgroundColor: "background"}} aria-label="simple table">
+         <HeaderWithStyles>
             <TableRow>
                <TableCell sx={{fontFamily: "bodyBold"}}>Name</TableCell>
                <TableCell sx={{fontFamily: "bodyBold"}}>Id</TableCell>
                <TableCell sx={{fontFamily: "bodyBold"}}>Options</TableCell>
             </TableRow>
-         </TableHead>
+         </HeaderWithStyles>
          <TableBody>
             {credentialsList.map((credentials) => (
-               <TableRow key={credentials.name}>
+               <StyledTableRow key={credentials.name}>
                   <TableCell sx={{fontFamily: "body"}}>{credentials.name}</TableCell>
                   <TableCell sx={{fontFamily: "body"}}>{credentials.accessKeyId}</TableCell>
                   <TableCell sx={{fontFamily: "body"}}>
@@ -71,9 +86,7 @@ export default function CredentialsTableComponent (
                         disabled = {loadingDeletion !== NONE}
                      >
                         {loadingDeletion === NONE &&
-                           <Delete
-                              color={"error"}
-                           />
+                           <Delete css={{color: "black"}} />
                         }
                         {loadingDeletion !== NONE &&
                            <div>
@@ -89,11 +102,11 @@ export default function CredentialsTableComponent (
                         }
                      </IconButton>
                   </TableCell>
-               </TableRow>
+               </StyledTableRow>
             ))}
          </TableBody>
 
-      </Table>
+      </TableWithStyles>
    </TableContainer>
    )
 }
