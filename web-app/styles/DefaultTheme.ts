@@ -29,13 +29,14 @@ const DefaultTheme = {
       primaryBright: PrimaryColorLight,
       accent: SecondaryColor,
       accentBright: SecondaryColorLight,
+      accentDark: SecondaryColorDark,
       error: ErrorColor ,
       text: '#000'
    },
    header: {
       hover: {
          "&:hover": {
-            "color": paradisePink
+            color: PrimaryColor
          }
       }
    },
@@ -70,6 +71,9 @@ const materialTheme = createMuiTheme({
       },
       success: {
          main: SuccessColor
+      },
+      background: {
+         paper: almostWhite
       }
    },
    
@@ -80,4 +84,4 @@ const materialTheme = createMuiTheme({
    }
  });
 
-export { DefaultTheme, materialTheme, ErrorColor }
+export { DefaultTheme, materialTheme, ErrorColor, SecondaryColor }

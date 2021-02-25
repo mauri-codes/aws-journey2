@@ -37,12 +37,12 @@ const HeaderComponent = () => {
                   thompson <FontAwesomeIcon icon={faAngleDown} />
                </div>
                {userMenu &&
-                  <UserMenu sx={{ backgroundColor: "background", borderColor: "primary" }}>
-                     <UserMenuOption sx={{"&:hover": { backgroundColor: "primaryBright"}}} onClick={() => router.push("/profile")}>
+                  <UserMenu sx={{ backgroundColor: "background", borderColor: "accent" }}>
+                     <UserMenuOption sx={{"&:hover": { backgroundColor: "accentBright"}}} onClick={() => router.push("/profile")}>
                         Profile
                      </UserMenuOption>
-                     <UserMenuOption sx={{"&:hover": { backgroundColor: "primaryBright"}}}> Credentials </UserMenuOption>
-                     <UserMenuOption sx={{"&:hover": { backgroundColor: "primaryBright"}}}> Sign Out </UserMenuOption>
+                     <UserMenuOption sx={{"&:hover": { backgroundColor: "accentBright"}}}> Credentials </UserMenuOption>
+                     <UserMenuOption sx={{"&:hover": { backgroundColor: "accentBright"}}}> Sign Out </UserMenuOption>
                   </UserMenu>
                }
             </NavLink>

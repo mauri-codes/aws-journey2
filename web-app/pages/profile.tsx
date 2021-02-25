@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StoreContext } from "../state/RootStore"
 import { AWSCredentialsComponent } from "../components/Profile/AWSCredentials";
 import { Person } from '@material-ui/icons';
+import { SecondaryColor } from '../styles/DefaultTheme'
 
 const MenuOptions = [{
    text: "Profile",
@@ -24,7 +25,19 @@ const MenuOptions = [{
 export default function UserProfile() {
    const { authStore } = useContext(StoreContext)
    const [ menuIndex, setMenuIndex ] = useState(0)
-   const menuOptionHover = {"&:hover": {backgroundColor: "primaryBright"}}
+   const menuOptionHover = {
+      marginLeft: "5px",
+      "&:hover": {
+         backgroundColor: "accentBright"
+      }
+   }
+   const selectedOption = {
+      color: "accent",
+      borderLeft: "5px solid " + SecondaryColor,
+      "&:hover": {
+         backgroundColor: "accentBright"
+      }
+   }
    return (
       <div sx={{fontFamily: "body"}}>
          <User>
@@ -33,10 +46,12 @@ export default function UserProfile() {
          </User>
          <Profile>
                <ProfileMenu>
-                  <ProfileMenuContainer>
+                  <ProfileMenuContainer
+                     // sx={{backgroundColor: "accentBright"}}
+                  >
                      {MenuOptions.map((option, index) => (
                         <MenuOption
-                           sx={menuOptionHover}
+                           sx={menuIndex === index ? selectedOption :menuOptionHover}
                            onClick={() => setMenuIndex(index)}
                            key={index + "option"}
                            >
