@@ -72,6 +72,13 @@ export type Overview = {
 export type TestSection = {
   __typename?: 'TestSection';
   testGroups?: Maybe<Array<Maybe<TestGroup>>>;
+  testData?: Maybe<TestData>;
+};
+
+export type TestData = {
+  __typename?: 'TestData';
+  tag?: Maybe<Scalars['String']>;
+  testParams?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type TestError = {
@@ -231,6 +238,7 @@ export type ResolversTypes = {
   Lab: ResolverTypeWrapper<Lab>;
   Overview: ResolverTypeWrapper<Overview>;
   TestSection: ResolverTypeWrapper<TestSection>;
+  TestData: ResolverTypeWrapper<TestData>;
   TestError: ResolverTypeWrapper<TestError>;
   Test: ResolverTypeWrapper<Test>;
   TestGroup: ResolverTypeWrapper<TestGroup>;
@@ -255,6 +263,7 @@ export type ResolversParentTypes = {
   Lab: Lab;
   Overview: Overview;
   TestSection: TestSection;
+  TestData: TestData;
   TestError: TestError;
   Test: Test;
   TestGroup: TestGroup;
@@ -298,6 +307,13 @@ export type OverviewResolvers<ContextType = Context, ParentType extends Resolver
 
 export type TestSectionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TestSection'] = ResolversParentTypes['TestSection']> = {
   testGroups?: Resolver<Maybe<Array<Maybe<ResolversTypes['TestGroup']>>>, ParentType, ContextType>;
+  testData?: Resolver<Maybe<ResolversTypes['TestData']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TestDataResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TestData'] = ResolversParentTypes['TestData']> = {
+  tag?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  testParams?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -354,6 +370,7 @@ export type Resolvers<ContextType = Context> = {
   Lab?: LabResolvers<ContextType>;
   Overview?: OverviewResolvers<ContextType>;
   TestSection?: TestSectionResolvers<ContextType>;
+  TestData?: TestDataResolvers<ContextType>;
   TestError?: TestErrorResolvers<ContextType>;
   Test?: TestResolvers<ContextType>;
   TestGroup?: TestGroupResolvers<ContextType>;

@@ -2,6 +2,8 @@
 import styled from "@emotion/styled"
 
 const LabContent = styled.div`
+   display: flex;
+   flex-direction: column;
    flex: 4 0 0;
    margin-right: 1rem;
    padding-top: 1rem;

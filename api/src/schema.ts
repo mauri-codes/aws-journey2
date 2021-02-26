@@ -23,6 +23,11 @@ const appSchema = gql`
    }
    type TestSection {
       testGroups: [TestGroup]
+      testData: TestData
+   }
+   type TestData {
+      tag: String
+      testParams: [String]
    }
    type TestError {
       code: String

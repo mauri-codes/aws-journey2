@@ -23,6 +23,10 @@ export interface Overview {
 
 export interface TestSection {
    testGroups: TestGroup[]
+   testData: {
+      tag: string,
+      testParams: string[]
+   }
 }
 
 export interface LabData {

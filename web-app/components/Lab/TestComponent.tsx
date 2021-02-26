@@ -5,7 +5,7 @@ import styled from "@emotion/styled"
 import React, { useState, useEffect, useContext } from 'react'
 import { AWSCredential, TestSection } from "../../types"
 import { LabContent, SubTitle, ContentHeader } from "./styled"
-import { Button, FormHelperText, InputLabel, makeStyles } from '@material-ui/core';
+import { Button, FormHelperText, InputLabel, makeStyles, TextField } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
 import { Select } from '@material-ui/core';
 import { getCredentialsList } from "../../queries/credentials";
@@ -17,7 +17,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const useStyles = makeStyles((theme) => ({
    formControl: {
       margin: theme.spacing(1),
-      minWidth: 120,
+      minWidth: "300px",
+      width: "100%"
+   },
+   inputText: {
+      marginTop: "1rem",
+      width: "100%"
+   },
+   testButton: {
+      width: "100%"
    },
    root: {
      '& > *': {
@@ -25,21 +33,19 @@ const useStyles = makeStyles((theme) => ({
      },
    },
  }));
-const useStylesForm = makeStyles((theme) => ({
-   formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-   },
-   selectEmpty: {
-      marginTop: theme.spacing(2),
-   },
-}));
 
 function TestsComponent ({testSection}: {testSection: TestSection}) {
    const [credentials, setCredentials] = useState(undefined)
    const [ credentialsList, setCredentialsList] = useState<undefined | null | AWSCredential[]>(undefined)
    const { authStore } = useContext(StoreContext)
+   const [ testParamGroup, setTestParamGroup ] = useState(undefined)
    const apolloClient = authStore.apolloClient
+   let { testData: {tag, testParams}} = testSection
+
+   useEffect(() => {
+      let paramsObject = testParams.reduce((acc, param) => ({[param]: "", ...acc}), {tag})
+      setTestParamGroup(paramsObject)
+   }, [testSection])
 
    useEffect(() => {
       if (apolloClient){
@@ -60,17 +66,21 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
          setCredentialsList(null)
       }
    }
+   function updateField(param: string, input: string) {
+      let newParams = {...testParamGroup, [param]: input}
+      setTestParamGroup(newParams)
+   }
    const classes = useStyles();
    return (
       <LabContent>
          <SubTitle sx={{fontFamily: "subTitle"}}>Tests</SubTitle>
          <TestActions>
             {
-               credentialsList === undefined &&
+               (credentialsList === undefined || testSection == null) &&
                   <FontAwesomeIcon size={'2x'} icon={faSpinner} spin />
             }
             {
-               credentialsList !== undefined &&
+               credentialsList !== undefined && testSection != null &&
                <FormControl className={classes.formControl}>
                   <Select
                      native
@@ -98,10 +108,26 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
                      }
                   </Select>
                   <FormHelperText>AWS Credentials</FormHelperText>
+                  {
+                     Object.keys(testParamGroup).map(param => (
+                        <div key={param}>
+                           <TextField
+                              className={classes.inputText}
+                              value={testParamGroup[param]}
+                              onChange={(event) => updateField(param, event.target.value)}
+                           />
+                           <FormHelperText>{param}</FormHelperText>
+                        </div>
+                     ))
+                  }
                </FormControl>
             }
             <div className={classes.root}>
-               <Button variant="contained" color="primary">
+               <Button
+                  className={classes.testButton}
+                  variant="contained"
+                  color="primary"
+               >
                   Test
                </Button>
             </div>
@@ -123,7 +149,9 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
 
 const TestActions = styled.div`
    display: flex;
-   justify-content: center;
+   flex-direction: column;
+   align-self: center;
+   width: 50%;
 `
 
 const Test = styled.div`

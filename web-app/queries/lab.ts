@@ -14,12 +14,16 @@ const getLabQuery = (labId) => {
                      services
                   }
                   testSection {
-                     testGroups {
-                     id
-                     title
-                     tests {
-                           id
+                     testData {
+                        testParams,
+                        tag
                      }
+                     testGroups {
+                        id
+                        title
+                        tests {
+                              id
+                        }
                      }
                   }
                }

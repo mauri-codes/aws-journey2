@@ -22,8 +22,10 @@ class LabSource extends DynamoDataSource {
       let testGroups: any[] = getTestGroups()
       let summaryLab = getSummaryLab()
       if (testGroups.length != 0 && summaryLab) {
+         let testData = summaryLab["testData"]
          summaryLab["testSection"] = {
-            testGroups
+            testGroups,
+            testData
          }
       }
       if (summaryLab) {
@@ -55,6 +57,8 @@ class LabSource extends DynamoDataSource {
                } if (item["sk"] == "data") {
                   location = "data"
                   item["id"] = id
+               } if (item["sk"] == "testData") {
+                  location = "testData"
                }
                delete item.sk
                delete item.pk

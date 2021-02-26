@@ -18,6 +18,7 @@ export default function  Lab () {
    const [lab, setLab] = useState<LabData>()
    const [activeTab, setActiveTab] = useState<Tabs>("Overview")
    const tabs = ["Overview", "Tests"]
+   console.log(lab)
    const tabList = tabs.map((tab: Tabs) => {
       if (tab === activeTab) {
          return <ActiveMenuOption
