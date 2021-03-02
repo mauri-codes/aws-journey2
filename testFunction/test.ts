@@ -34,16 +34,20 @@ function validate (params: any[]) {
 
 async function runTests(user: string, lab: string, testParams: TestParams, credentialsLabel: string) {
    let { credentials }: Credentials = await getCredentials(user, credentialsLabel) as Credentials
-
+   
    const [testGroups, testData, labData] = await getLabData(lab)
+   console.log(JSON.stringify({testGroups, testData, labData}))
 
-   if (testData && testGroups && labData) {
+   if (testData && testGroups && labData) {      
       const { tag, testParams: params } = testData
+      
       const { location } = labData
       const { testSuite } = await import(`./tests/${location}/${lab}`)
       if ( testParams == null ) {
          testParams = {}
       }
+      let region = testParams.region
+      delete testParams.region
       let allParams = params.every((param: string) => testParams[param] != null)
       if (!allParams) {
          throw "Parameters missing in testParams"
@@ -52,14 +56,18 @@ async function runTests(user: string, lab: string, testParams: TestParams, crede
          testParams,
          { Key: "journey", Value: tag },
          {
-            region: testParams.region,
+            region,
             credentials: {
                id: credentials.accessKeyId,
                secret: credentials.secret
             }
          }
       )
+      console.log(JSON.stringify(testParams))
+      console.log(JSON.stringify({ Key: "journey", Value: tag }));
+
       const testResult = await tests.run()
+
       console.log(JSON.stringify(testResult))
       return testResult
    } else {
@@ -72,12 +80,15 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
    try {
       const body: TestBody = getBody(event)
       const user = getUser(event)
+      console.log(JSON.stringify(body))
+      console.log(user)
 
       let { lab, testParams, credentialsLabel } = body
+      
       validate([[lab, "lab"], [testParams, "testParams"], [credentialsLabel, "credentialsLabel"]])
-
+      
       let tests = await runTests(user, lab, testParams, credentialsLabel)
-
+      
       return {
          statusCode: 200,
          body: JSON.stringify({
@@ -87,7 +98,7 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
                   "Access-Control-Allow-Origin": "*",
                   "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
             },
-            tests,
+            tests
          })
       }
 
@@ -126,16 +137,11 @@ async function getLabData(lab: string) {
    const dynamoRequest = await query(`lab_${lab}`)
    const records = dynamoRequest.Items
 
-   const testGroups = records?.filter(record => record.sk.startsWith("testGroup"))
+   const testGroups = records?.filter(record => record.sk.startsWith("testgroup"))
    const testData = records?.find(record => record.sk === "testData")
    const labData = records?.find(record => record.sk === "data")
 
    return [testGroups, testData, labData]
-}
-
-function includeAdditionalTestInfo(testGroups: any[], testResult: any) {
-   console.log(JSON.stringify(testGroups))
-   console.log(JSON.stringify(testResult))
 }
 
 

@@ -12,6 +12,7 @@ import {
 import { LambdaRestApi, LambdaIntegration, AuthorizationType, CfnAuthorizer, Cors } from "@aws-cdk/aws-apigateway";
 import { Table } from "@aws-cdk/aws-dynamodb";
 import { IUserPool, UserPool } from "@aws-cdk/aws-cognito";
+import { Duration } from '@aws-cdk/core';
 
 
 interface APIStackProps extends cdk.StackProps {
@@ -103,6 +104,7 @@ export class ApiStack extends cdk.Stack {
          functionName: "api-tester",
          runtime: Runtime.NODEJS_10_X,
          handler: 'test.handler',
+         timeout: Duration.minutes(10),
          code: Code.fromAsset(path.join(__dirname, '../../testFunction/packaged'))
       });
       processor.addToRolePolicy(policyStatement)
@@ -113,6 +115,7 @@ export class ApiStack extends cdk.Stack {
          functionName: "api-apollo-backend",
          runtime: Runtime.NODEJS_10_X,
          handler: 'graphql.graphqlHandler',
+         timeout: Duration.seconds(30),
          code: Code.fromAsset(path.join(__dirname, '../../api/packaged'))
       });
       processor.addToRolePolicy(policyStatement)

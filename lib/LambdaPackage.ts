@@ -4,7 +4,7 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 const copyFile = util.promisify(fs.copyFile)
 const path = require('path')
-// const fse = require('fs-extra');
+// ts-node LambdaPackage.ts --dir=../testFunction
 
 const args = minimist(process.argv.slice(2))
 
