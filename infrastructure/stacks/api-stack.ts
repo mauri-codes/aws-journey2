@@ -102,9 +102,10 @@ export class ApiStack extends cdk.Stack {
    createTesterProcessor(policyStatement: PolicyStatement) {
       const processor = new Function(this, 'TesterProcessor', {
          functionName: "api-tester",
-         runtime: Runtime.NODEJS_10_X,
+         runtime: Runtime.NODEJS_12_X,
          handler: 'test.handler',
          timeout: Duration.minutes(10),
+         memorySize: 1028,
          code: Code.fromAsset(path.join(__dirname, '../../testFunction/packaged'))
       });
       processor.addToRolePolicy(policyStatement)
@@ -113,7 +114,7 @@ export class ApiStack extends cdk.Stack {
    createApiProcessor(policyStatement: PolicyStatement) {
       const processor = new Function(this, 'QueryProcessor', {
          functionName: "api-apollo-backend",
-         runtime: Runtime.NODEJS_10_X,
+         runtime: Runtime.NODEJS_12_X,
          handler: 'graphql.graphqlHandler',
          timeout: Duration.seconds(30),
          code: Code.fromAsset(path.join(__dirname, '../../api/packaged'))

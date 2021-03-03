@@ -64,17 +64,16 @@ async function runTests(user: string, lab: string, testParams: TestParams, crede
          }
       )
       console.log(JSON.stringify(testParams))
-      console.log(JSON.stringify({ Key: "journey", Value: tag }));
+      console.log(JSON.stringify({ Key: "journey", Value: tag }))  
 
       const testResult = await tests.run()
-
+      
       console.log(JSON.stringify(testResult))
       return testResult
    } else {
       throw "internal error"
    }
 }
-
 
 export async function handler (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
    try {
