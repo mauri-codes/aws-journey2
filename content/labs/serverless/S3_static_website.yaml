@@ -17,6 +17,7 @@ testData:
   tag: "s3-website"
   testParams:
     - s3BucketName
+    - region
 testGroups:
   - id: S3BucketTests
     title: S3 Website Bucket Configuration

@@ -3,6 +3,7 @@
 import { jsx } from 'theme-ui'
 import styled from "@emotion/styled"
 import React, { useState, useEffect, useContext } from 'react'
+import axios from 'axios'
 import { AWSCredential, TestSection } from "../../types"
 import { LabContent, SubTitle, ContentHeader } from "./styled"
 import { Button, FormHelperText, InputLabel, makeStyles, TextField } from '@material-ui/core';
@@ -12,6 +13,7 @@ import { getCredentialsList } from "../../queries/credentials";
 import { StoreContext } from "../../state/RootStore";
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useRouter } from 'next/router'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,9 +43,11 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
    const [ testParamGroup, setTestParamGroup ] = useState(undefined)
    const apolloClient = authStore.apolloClient
    let { testData: {tag, testParams}} = testSection
+   const router = useRouter()
+   const { lab_id } = router.query
 
    useEffect(() => {
-      let paramsObject = testParams.reduce((acc, param) => ({[param]: "", ...acc}), {tag})
+      let paramsObject = testParams.reduce((acc, param) => ({[param]: "", ...acc}), {})
       setTestParamGroup(paramsObject)
    }, [testSection])
 
@@ -52,6 +56,15 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
          getCredentials()
       }
    }, [apolloClient])
+
+   async function test() {
+      let params = {
+         lab: lab_id,
+         testParams: testParamGroup,
+         credentialsLabel: credentials.name
+      }
+      return await authStore.post("/tester", params)
+   }
 
    async function getCredentials() {
       const apolloQuery = await apolloClient.query({
@@ -74,6 +87,9 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
    return (
       <LabContent>
          <SubTitle sx={{fontFamily: "subTitle"}}>Tests</SubTitle>
+         <div sx={{fontFamily:"body"}}>
+            Once you finish the lab, run some tests! Just make sure your credentials are correctly set up in the platform.
+         </div>
          <TestActions>
             {
                (credentialsList === undefined || testSection == null) &&
@@ -85,7 +101,7 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
                   <Select
                      native
                      value={ credentials != null ? credentials.name: "None"}
-                     onChange={(event) => setCredentials(event.target.name)}
+                     onChange={(event) => setCredentials({name: event.target.value})}
                      inputProps={{
                         name: 'name'
                      }}
@@ -127,6 +143,7 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
                   className={classes.testButton}
                   variant="contained"
                   color="primary"
+                  onClick={() => test()}
                >
                   Test
                </Button>
@@ -151,6 +168,7 @@ const TestActions = styled.div`
    display: flex;
    flex-direction: column;
    align-self: center;
+   margin: 2rem 0;
    width: 50%;
 `
 

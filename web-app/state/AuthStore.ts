@@ -1,7 +1,8 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx"
 import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { Auth } from 'aws-amplify';
+import { Auth } from 'aws-amplify'
+import axios from 'axios'
 
 export interface AuthInfo {
    accessToken: string
@@ -20,8 +21,10 @@ class AuthStore {
    username: string | null
    email: string | null
    apolloClient: ApolloClient<NormalizedCacheObject>
+   endpoint: string
    constructor() {
       makeAutoObservable(this)
+      this.endpoint = "https://api.aws-journey.net"
    }
    async setCurrentSession() {
       try {
@@ -67,6 +70,12 @@ class AuthStore {
          link: authLink.concat(httpLink),
          cache: new InMemoryCache()
       })
+   }
+   async post(route: string, data: any) {
+      const config = {
+         headers: { Authorization: `Bearer ${this.idToken}` }
+     };
+      return await axios.post(`${this.endpoint}${route}`, data, config)
    }
 }
 

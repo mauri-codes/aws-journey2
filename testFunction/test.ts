@@ -47,7 +47,6 @@ async function runTests(user: string, lab: string, testParams: TestParams, crede
          testParams = {}
       }
       let region = testParams.region
-      delete testParams.region
       let allParams = params.every((param: string) => testParams[param] != null)
       if (!allParams) {
          throw "Parameters missing in testParams"
@@ -93,15 +92,15 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
          body: JSON.stringify({
             message: 'tests runned successfully',
             headers: {
-                  "Access-Control-Allow-Headers" : "Content-Type",
                   "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                  "Access-Control-Allow-Methods": "OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD"
             },
             tests
          })
       }
 
    } catch (error) {
+      console.log(error)
       return {
          statusCode: error.status || 400,
          body: JSON.stringify({
@@ -110,8 +109,7 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
                   "Access-Control-Allow-Headers" : "Content-Type",
                   "Access-Control-Allow-Origin": "*",
                   "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-            },
-            input: event,
+            }
          })
       }
    }   

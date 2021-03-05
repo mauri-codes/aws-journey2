@@ -4,6 +4,8 @@ import path from "path"
 import fs from "fs"
 import { safeLoad as yamlLoad } from "js-yaml"
 
+// ts-node sync.ts --lab=serverless/S3_static_website
+
 const dynamo = new DynamoDB.DocumentClient({region: "us-east-1"})
 
 interface Error {
