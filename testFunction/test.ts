@@ -32,6 +32,12 @@ function validate (params: any[]) {
    })
 }
 
+const HEADERS = {
+   "Access-Control-Allow-Headers" : "Content-Type",
+   "Access-Control-Allow-Origin": "*",
+   "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+}
+
 async function runTests(user: string, lab: string, testParams: TestParams, credentialsLabel: string) {
    let { credentials }: Credentials = await getCredentials(user, credentialsLabel) as Credentials
    
@@ -91,12 +97,9 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
          statusCode: 200,
          body: JSON.stringify({
             message: 'tests runned successfully',
-            headers: {
-                  "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD"
-            },
             tests
-         })
+         }),
+         headers: HEADERS
       }
 
    } catch (error) {
@@ -104,13 +107,9 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
       return {
          statusCode: error.status || 400,
          body: JSON.stringify({
-            message: error.message,
-            headers: {
-                  "Access-Control-Allow-Headers" : "Content-Type",
-                  "Access-Control-Allow-Origin": "*",
-                  "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-            }
-         })
+            message: error.message
+         }),
+         headers: HEADERS
       }
    }   
 }

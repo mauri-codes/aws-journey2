@@ -5,6 +5,7 @@ export interface Error {
 
 export interface Test {
    id: string
+   success?: boolean
    errors: Error[]
 }
 
@@ -12,6 +13,7 @@ export interface TestGroup {
    id: string
    title: string
    tests: Test[]
+   success?: boolean
    errors: Error[]
 }
 

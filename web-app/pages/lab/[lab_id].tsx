@@ -55,18 +55,11 @@ export default function  Lab () {
    return (
       <LabContainer>
          {lab &&
-            <div>
-               <TitleContainer>
-                  <Title>
-                     {lab.title}
-                  </Title>
-               </TitleContainer>
-               <LabContentsComponent
-                  tabList={tabList}
-                  activeTab={activeTab}
-                  lab={lab}
-               />
-            </div>
+            <LabContentsComponent
+               tabList={tabList}
+               activeTab={activeTab}
+               lab={lab}
+            />
          }
       </LabContainer>
    )
