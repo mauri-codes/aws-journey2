@@ -3,8 +3,7 @@
 import { jsx } from 'theme-ui'
 import styled from "@emotion/styled"
 import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
-import { AWSCredential, TestSection, TestGroup } from "../../types"
+import { AWSCredential, TestSection, TestGroup, Test } from "../../types"
 import { LabContent, SubTitle, ContentHeader } from "./styled"
 import { Button, FormHelperText, InputLabel, makeStyles, TextField } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
@@ -14,6 +13,8 @@ import { StoreContext } from "../../state/RootStore";
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AssessmentOutlined, FiberManualRecord as Circle } from '@material-ui/icons';
+import { CheckCircleOutlined } from '@material-ui/icons';
+import { CancelOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router'
 
 
@@ -44,7 +45,8 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
    const [ testParamGroup, setTestParamGroup ] = useState(undefined)
    const apolloClient = authStore.apolloClient
    const [ allTestsSuccessful, setAllTestsSuccessful ] = useState()
-   const [ testGroups, setTestGroups ] = useState( {...testSection.testGroups})
+
+   const [ testGroups, setTestGroups ] = useState([...testSection.testGroups])
    let { testData: {tag, testParams}} = testSection
    const router = useRouter()
    const { lab_id } = router.query
@@ -63,32 +65,31 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
       let testGroupObject = {}
       testResults.forEach(({id, success, tests}) => {
          let testObject = {}
-         tests.forEach(({id, success}) => {
-            testObject[id] = success
+         tests.forEach(({id, success, error}) => {
+            testObject[id] = {
+               success,
+               error
+            }
          })
          testGroupObject[id] = {success, tests: testObject}
       })
-      let xtestGroups = testGroups
-      if (!Array.isArray(testGroups)) {
-         let arr = []
-         let parsed = JSON.parse(JSON.stringify(testGroups))
-         for(let x in parsed){
-            arr.push(parsed[x]);
-         }
-         xtestGroups = arr
-      }
       
-      let finalTests = xtestGroups.map(testGroup => {
+      let finalTests = testGroups.map(testGroup => {
          let newTestGroup:TestGroup = {...testGroup}
          let testGroupId = newTestGroup.id
          newTestGroup.success = testGroupObject[testGroupId].success
          let newTests = testGroup.tests.map(test => {
-            test.success = testGroupObject[testGroupId].tests[test.id]
-            return test
+            let newTest = {...test}
+            testGroupObject[testGroupId].tests
+            let { error, success } = testGroupObject[testGroupId].tests[test.id]
+            newTest.error = error
+            newTest.success = success
+            return newTest
          })
          newTestGroup.tests = newTests
          return newTestGroup
       })
+      
       setTestGroups(finalTests)
    }
 
@@ -188,23 +189,64 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
             </div>
 
          </TestActions>
-
-         {testSection.testGroups.map(testGroup => <TestCollection key={testGroup.id}>
-            <TestHeader>
-               <AssessmentOutlined />
-               <TestsTitle sx={{fontFamily: "subTitle"}}>{testGroup.title}</TestsTitle>
-            </TestHeader> 
-            <hr style={{marginBottom: "0.6rem"}} />
-            {testGroup.tests.map((test, index) => <TestBlock sx={{fontFamily:"body"}} key={test.id}>
-               <Test>
-                  <Circle style={{fontSize: 15}}/>
-                  <TestDescription>{test.id}</TestDescription>
-               </Test>
-               <TestResult>result</TestResult>
-            </TestBlock>)}
-         </TestCollection>)}
+         {testGroups.map(testGroup => (
+               <TestCollection key={testGroup.id} sx={{backgroundColor: testGroupColor(testGroup)}}>
+                  <TestHeader>
+                     <AssessmentOutlined />
+                     <TestsTitle sx={{fontFamily: "subTitle"}}>{testGroup.title}</TestsTitle>
+                  </TestHeader> 
+                  <hr style={{marginBottom: "0.6rem", borderColor: "gray"}} />
+                  {testGroup.tests.map((test, index) => (
+                     <TestDisplay key={test.id}>
+                        <TestStripe sx={{backgroundColor: testStripeColor(test)}} />
+                        <TestBlock sx={{fontFamily:"body", backgroundColor: testColor(test)}}>
+                           <TestDescription>{test.id}</TestDescription>
+                           <TestResult>{test.error}</TestResult>
+                        </TestBlock>
+                     {test.success != null &&
+                        <TestLogo sx={{backgroundColor: testColor(test)}}>
+                           {test.success &&
+                              <CheckCircleOutlined sx={{color: "successGreen"}} />
+                           }
+                           {!test.success &&
+                              <CancelOutlined sx={{color: "error"}} />
+                           }
+                        </TestLogo>
+                     }
+                     
+                  </TestDisplay>
+                  ))}
+               </TestCollection>
+         ))}
       </LabContent>
    )
+   function testStripeColor({ success }: Test) {
+      if (success == null) {
+         return 'accent'
+      }
+      if (success) {
+         return 'successGreen'
+      }
+      return 'error'
+   }
+   function testGroupColor({ success }: TestGroup) {
+      if (success == null) {
+         return 'accentBright'
+      }
+      if (success) {
+         return 'lightGreen'
+      }
+      return 'lightRed'
+   }
+   function testColor({ success }: Test) {
+      if (success == null) {
+         return 'lightGray'
+      }
+      if (success) {
+         return 'lighterGreen'
+      }
+      return 'lighterRed'
+   }
 }
 
 const TestHeader = styled.div`
@@ -214,9 +256,19 @@ const TestHeader = styled.div`
    padding-left: 0.7rem;
 `
 
+const TestStripe = styled.div`
+   flex: 20px 0 0;
+`
+
+const TestLogo = styled.div`
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex: 70px 0 0;
+`
+
 const TestBlock = styled.div`
-   background-color: lightgreen;
-   margin: 0 0.7rem;
+   flex: 1 0 0;
    padding: 0.6rem;
 `
 
@@ -234,14 +286,12 @@ const TestsTitle = styled.div`
 `
 
 const TestCollection = styled.div`
-   background-color: lightgray;
    padding: 0 0.7rem;
 `
 
-const Test = styled.div`
+const TestDisplay = styled.div`
    display: flex;
-   align-items: center;
-   font-size: 0.9rem;
+   margin: 0.7rem 0.7rem;
 `
 const TestCount = styled.div`
    flex: 0 0 1rem;
@@ -251,20 +301,18 @@ const TestCount = styled.div`
 `
 const TestDescription = styled.div`
    flex: 1 0 0;
+   font-size: 0.9rem;
    min-width: 0;
   /* white-space: nowrap;
   text-overflow: ellipsis */
    padding-top: 0.3rem;
    padding-bottom: 0.3rem;
    overflow: hidden;
-   margin-left: 0.5rem;
 `
 const TestResult = styled.div`
    flex: 1 0 0;
    min-width: 0;
-   font-size: 0.85rem;
-   margin-left: 1.4rem;
+   font-size: 0.8rem;
 `
 
 export { TestsComponent }
-

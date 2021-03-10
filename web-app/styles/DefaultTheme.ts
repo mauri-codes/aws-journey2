@@ -10,6 +10,14 @@ const ComplementaryColor = "hsl(24, 37%, 75%)"
 const ErrorColor = "hsl(0, 61%, 50%)"
 const SuccessColor = "hsl(121, 70%, 31%)"
 
+const lightGreen = "hsl(132, 32%, 85%)"
+const lightGray = "hsl(217, 34%, 93%)"
+const lighterGreen = "hsl(132, 32%, 93%)"
+const successGreen = "hsl(132, 32%, 70%)"
+const lightRed = "hsl(0, 61%, 80%)"
+const lighterRed = "hsl(0, 61%, 90%)"
+const errorRed = "hsl(0, 61%, 50%)"
+
 const almostWhite = "hsl(0, 0%, 95%)"
 const paradisePink = "hsl(354, 73%, 59%)"
 
@@ -30,8 +38,15 @@ const DefaultTheme = {
       accent: SecondaryColor,
       accentBright: SecondaryColorLight,
       accentDark: SecondaryColorDark,
-      error: ErrorColor ,
-      text: '#000'
+      error: errorRed,
+      text: '#000',
+      lightGreen,
+      lightRed,
+      lighterGreen,
+      lighterRed,
+      lightGray,
+      successGreen,
+      errorRed
    },
    header: {
       hover: {

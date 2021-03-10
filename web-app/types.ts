@@ -7,6 +7,7 @@ export interface Test {
    id: string
    success?: boolean
    errors: Error[]
+   error?: string
 }
 
 export interface TestGroup {
