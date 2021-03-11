@@ -94,6 +94,9 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
    }
 
    async function test() {
+      let credentialsInfo = getCredentialsInfo(credentials.name)      
+      testParamGroup.region = credentialsInfo.mainRegion
+      testParamGroup.secondaryRegion = credentialsInfo.secondaryRegion
       let params = {
          lab: lab_id,
          testParams: testParamGroup,
@@ -103,6 +106,10 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
       updateTestGroupsResults(testResult.data.tests.testGroups)
       setAllTestsSuccessful(testResult.data.tests.success) 
 
+   }
+
+   function getCredentialsInfo(credentialsName: string) {
+      return credentialsList.find(credentials => credentials.name == credentialsName)
    }
 
    async function getCredentials() {
@@ -164,16 +171,18 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
                   </Select>
                   <FormHelperText>AWS Credentials</FormHelperText>
                   {
-                     Object.keys(testParamGroup).map(param => (
-                        <div key={param}>
-                           <TextField
-                              className={classes.inputText}
-                              value={testParamGroup[param]}
-                              onChange={(event) => updateField(param, event.target.value)}
-                           />
-                           <FormHelperText>{param}</FormHelperText>
-                        </div>
-                     ))
+                     Object.keys(testParamGroup)
+                        .filter(param => param != "region" && param != "secondaryRegion")
+                        .map(param => (
+                           <div key={param}>
+                              <TextField
+                                 className={classes.inputText}
+                                 value={testParamGroup[param]}
+                                 onChange={(event) => updateField(param, event.target.value)}
+                              />
+                              <FormHelperText>{param}</FormHelperText>
+                           </div>
+                        ))
                   }
                </FormControl>
             }

@@ -47,6 +47,8 @@ const appSchema = gql`
       accessKeyId: String
       secret: String
       name: String
+      mainRegion: String
+      secondaryRegion: String
    }
    input DeleteCredentialsInput {
       name: String
@@ -59,6 +61,8 @@ const appSchema = gql`
       accessKeyId: String
       secret: String
       name: String
+      mainRegion: String
+      secondaryRegion: String
    }
    type ResponseState {
       success: Boolean

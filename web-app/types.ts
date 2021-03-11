@@ -42,4 +42,6 @@ export interface AWSCredential {
    name?: string
    secret?: string
    accessKeyId?: string
+   mainRegion?: string
+   secondaryRegion?: string
 }

@@ -105,6 +105,8 @@ export type SetCredentialsInput = {
   accessKeyId?: Maybe<Scalars['String']>;
   secret?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  mainRegion?: Maybe<Scalars['String']>;
+  secondaryRegion?: Maybe<Scalars['String']>;
 };
 
 export type DeleteCredentialsInput = {
@@ -122,6 +124,8 @@ export type AwsCredentials = {
   accessKeyId?: Maybe<Scalars['String']>;
   secret?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  mainRegion?: Maybe<Scalars['String']>;
+  secondaryRegion?: Maybe<Scalars['String']>;
 };
 
 export type ResponseState = {
@@ -347,6 +351,8 @@ export type AwsCredentialsResolvers<ContextType = Context, ParentType extends Re
   accessKeyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   secret?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  mainRegion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  secondaryRegion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

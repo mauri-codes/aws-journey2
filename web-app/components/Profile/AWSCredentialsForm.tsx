@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { Done, Cancel } from '@material-ui/icons'
 import { AWSCredential } from "../../types"
-import { isAlphanumeric, isAwsId, isAwsSecret } from '../../lib/regex'
+import { isAlphanumeric, isAwsId, isAwsRegion, isAwsSecret } from '../../lib/regex'
 import { delay } from "../../lib/utils";
 
 const NOT_LOADING = "NOT_LOADING"
@@ -30,6 +30,8 @@ interface ValidationInputs {
    name: Validation
    secret: Validation
    accessKeyId: Validation
+   mainRegion: Validation
+   secondaryRegion: Validation
 }
 
 export default function AWSCredentialsForm (
@@ -46,15 +48,26 @@ export default function AWSCredentialsForm (
    const [ loadingSetCredentials, setLoadingSetCredentials ] = useState(NOT_LOADING)
    const [ validInputs, setValidInputs ] = useState<ValidationInputs>(undefined)
    let emptyAWSCredentials: AWSCredential = {
-      name: "", secret: "", accessKeyId: ""
+      name: "", secret: "", accessKeyId: "", mainRegion: "", secondaryRegion: ""
    }
    function allValidInputs() {
       let allValidInputs = true
       if (validInputs!== undefined ) {
-         allValidInputs = validInputs.name.valid && validInputs.accessKeyId.valid && validInputs.secret.valid
+         allValidInputs =
+            validInputs.name.valid &&
+            validInputs.accessKeyId.valid &&
+            validInputs.secret.valid &&
+            validInputs.mainRegion.valid &&
+            validInputs.secret.valid
       }
-      const noEmptyInputs = newCredentials.name != "" && newCredentials.accessKeyId != "" && newCredentials.secret != ""
-      return allValidInputs && noEmptyInputs
+      const noEmptyInputs =
+         newCredentials.name != "" &&
+         newCredentials.accessKeyId != "" &&
+         newCredentials.secret != "" &&
+         newCredentials.mainRegion != "" &&
+         newCredentials.secondaryRegion != ""
+      const differentRegions = newCredentials.secondaryRegion != newCredentials.mainRegion
+      return allValidInputs && noEmptyInputs && differentRegions
    }
    const [ newCredentials, setNewCredentials ] = useState(emptyAWSCredentials)
    function updateInputValidation(credentials: AWSCredential) {
@@ -70,6 +83,14 @@ export default function AWSCredentialsForm (
          secret: {
             valid: isAwsSecret.test(credentials.secret) || credentials.secret == "",
             message: "Not a valid AWS Secret Access Key"
+         },
+         mainRegion: {
+            valid: isAwsRegion.test(credentials.mainRegion) || credentials.mainRegion == "",
+            message: "Not a valid AWS Region"
+         },
+         secondaryRegion: {
+            valid: isAwsRegion.test(credentials.secondaryRegion) || credentials.secondaryRegion == "",
+            message: "Not a valid AWS Region"
          }
       }
       setValidInputs(inputSummary)
@@ -132,6 +153,22 @@ export default function AWSCredentialsForm (
                helperText={(validInputs !== undefined && !validInputs.secret.valid)? validInputs.secret.message: null}
                value={newCredentials.secret}
                onChange={(event) => updateNewCredentialsField({secret: event.target.value})}
+            />
+         </CredentialsField>
+         <CredentialsField>
+            <TextField label="Main Region" variant="outlined"
+               error={validInputs !== undefined && !validInputs.mainRegion.valid}
+               helperText={(validInputs !== undefined && !validInputs.mainRegion.valid)? validInputs.mainRegion.message: null}
+               value={newCredentials.mainRegion}
+               onChange={(event) => updateNewCredentialsField({mainRegion: event.target.value})}
+            />
+         </CredentialsField>
+         <CredentialsField>
+            <TextField label="Secondary Region" variant="outlined"
+               error={validInputs !== undefined && !validInputs.secondaryRegion.valid}
+               helperText={(validInputs !== undefined && !validInputs.secondaryRegion.valid)? validInputs.secondaryRegion.message: null}
+               value={newCredentials.secondaryRegion}
+               onChange={(event) => updateNewCredentialsField({secondaryRegion: event.target.value})}
             />
          </CredentialsField>
          {loadingSetCredentials === LOADING &&

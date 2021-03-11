@@ -10,6 +10,8 @@ const getCredentialsList = () => {
                accessKeyId
                secret
                name
+               mainRegion
+               secondaryRegion
             }
          }
       }
@@ -19,7 +21,13 @@ const getCredentialsList = () => {
 const setAWSCredentials = (credentials: AWSCredential) => {
    return gql`
       mutation setAWSCredentials {
-         setAWSCredentials(credentials: {name: "${credentials.name}", accessKeyId: "${credentials.accessKeyId}", secret: "${credentials.secret}"}) {
+         setAWSCredentials(credentials: {
+            name: "${credentials.name}",
+            accessKeyId: "${credentials.accessKeyId}",
+            secret: "${credentials.secret}",
+            mainRegion: "${credentials.mainRegion}",
+            secondaryRegion: "${credentials.secondaryRegion}",
+         }) {
             success
             message
          }

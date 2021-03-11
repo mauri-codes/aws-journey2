@@ -24,9 +24,11 @@ class UserCredentialsSource extends DynamoDataSource {
    @Catch
    async getAWSCredentials(user: string) {
       let queryResult = await this.query(`user_${user}#${this.credentialsTag}`)
-      let credentialsGroup = (queryResult as CredentialsRecord[])?.map((record) => ({
-         name: record.sk,
-         accessKeyId: `${record.credentials.accessKeyId?.substring(0, 5)}****************`
+      let credentialsGroup = (queryResult as CredentialsRecord[])?.map(({sk, credentials: {accessKeyId, mainRegion, secondaryRegion}}) => ({
+         name: sk,
+         accessKeyId: `${accessKeyId?.substring(0, 5)}****************`,
+         mainRegion,
+         secondaryRegion
       }))
       return {
          success: true,
