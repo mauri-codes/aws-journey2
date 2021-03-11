@@ -2,19 +2,17 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import styled from "@emotion/styled"
+import { TestResultsComponent } from "./TestResultsComponent";
 import React, { useState, useEffect, useContext } from 'react'
-import { AWSCredential, TestSection, TestGroup, Test } from "../../types"
-import { LabContent, SubTitle, ContentHeader } from "./styled"
-import { Button, FormHelperText, InputLabel, makeStyles, TextField } from '@material-ui/core';
+import { AWSCredential, TestSection, TestGroup } from "../../types"
+import { LabContent, SubTitle } from "./styled"
+import { Button, FormHelperText, makeStyles, TextField } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
 import { Select } from '@material-ui/core';
 import { getCredentialsList } from "../../queries/credentials";
 import { StoreContext } from "../../state/RootStore";
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { AssessmentOutlined, FiberManualRecord as Circle } from '@material-ui/icons';
-import { CheckCircleOutlined } from '@material-ui/icons';
-import { CancelOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router'
 
 
@@ -129,6 +127,13 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
       let newParams = {...testParamGroup, [param]: input}
       setTestParamGroup(newParams)
    }
+   function allValidInputs() {
+      const allParams = Object.keys(testParamGroup)
+         .filter(param => param != "region" && param != "secondaryRegion")
+         .map(param => testParamGroup[param] != "")
+      const allParamsFilled = allParams.every(param => param)
+      return allParamsFilled || allParams.length == 0
+   }
    const classes = useStyles();
    return (
       <LabContent>
@@ -192,94 +197,16 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
                   variant="contained"
                   color="primary"
                   onClick={() => test()}
+                  disabled={!allValidInputs()}
                >
                   Test
                </Button>
             </div>
-
          </TestActions>
-         {testGroups.map(testGroup => (
-               <TestCollection key={testGroup.id} sx={{backgroundColor: testGroupColor(testGroup)}}>
-                  <TestHeader>
-                     <AssessmentOutlined />
-                     <TestsTitle sx={{fontFamily: "subTitle"}}>{testGroup.title}</TestsTitle>
-                  </TestHeader> 
-                  <hr style={{marginBottom: "0.6rem", borderColor: "gray"}} />
-                  {testGroup.tests.map((test, index) => (
-                     <TestDisplay key={test.id}>
-                        <TestStripe sx={{backgroundColor: testStripeColor(test)}} />
-                        <TestBlock sx={{fontFamily:"body", backgroundColor: testColor(test)}}>
-                           <TestDescription>{test.id}</TestDescription>
-                           <TestResult>{test.error}</TestResult>
-                        </TestBlock>
-                     {test.success != null &&
-                        <TestLogo sx={{backgroundColor: testColor(test)}}>
-                           {test.success &&
-                              <CheckCircleOutlined sx={{color: "successGreen"}} />
-                           }
-                           {!test.success &&
-                              <CancelOutlined sx={{color: "error"}} />
-                           }
-                        </TestLogo>
-                     }
-                     
-                  </TestDisplay>
-                  ))}
-               </TestCollection>
-         ))}
+         <TestResultsComponent testGroups={testGroups} />
       </LabContent>
    )
-   function testStripeColor({ success }: Test) {
-      if (success == null) {
-         return 'accent'
-      }
-      if (success) {
-         return 'successGreen'
-      }
-      return 'error'
-   }
-   function testGroupColor({ success }: TestGroup) {
-      if (success == null) {
-         return 'accentBright'
-      }
-      if (success) {
-         return 'lightGreen'
-      }
-      return 'lightRed'
-   }
-   function testColor({ success }: Test) {
-      if (success == null) {
-         return 'lightGray'
-      }
-      if (success) {
-         return 'lighterGreen'
-      }
-      return 'lighterRed'
-   }
 }
-
-const TestHeader = styled.div`
-   display: flex;
-   align-items: center;
-   margin: 1.4rem 0 0.5rem 0;
-   padding-left: 0.7rem;
-`
-
-const TestStripe = styled.div`
-   flex: 20px 0 0;
-`
-
-const TestLogo = styled.div`
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex: 70px 0 0;
-`
-
-const TestBlock = styled.div`
-   flex: 1 0 0;
-   padding: 0.6rem;
-`
 
 const TestActions = styled.div`
    display: flex;
@@ -287,41 +214,6 @@ const TestActions = styled.div`
    align-self: center;
    margin: 2rem 0;
    width: 50%;
-`
-
-const TestsTitle = styled.div`
-   font-weight: bold;
-   margin-left: 0.5rem;
-`
-
-const TestCollection = styled.div`
-   padding: 0 0.7rem;
-`
-
-const TestDisplay = styled.div`
-   display: flex;
-   margin: 0.7rem 0.7rem;
-`
-const TestCount = styled.div`
-   flex: 0 0 1rem;
-   font-weight: bold;
-   padding-top: 0.3rem;
-   padding-bottom: 0.3rem;
-`
-const TestDescription = styled.div`
-   flex: 1 0 0;
-   font-size: 0.9rem;
-   min-width: 0;
-  /* white-space: nowrap;
-  text-overflow: ellipsis */
-   padding-top: 0.3rem;
-   padding-bottom: 0.3rem;
-   overflow: hidden;
-`
-const TestResult = styled.div`
-   flex: 1 0 0;
-   min-width: 0;
-   font-size: 0.8rem;
 `
 
 export { TestsComponent }
