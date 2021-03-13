@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { AWSCredential } from "../types";
+import { AWSCredential } from "../types"
 
 const getCredentialsList = () => {
    return gql`

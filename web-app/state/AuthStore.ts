@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx"
+import { DocumentNode } from '@apollo/client'
 import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { Auth } from 'aws-amplify'
@@ -30,13 +31,16 @@ class AuthStore {
       try {
          const session = await Auth.currentSession()
          console.log(session)
-         this.accessToken = session["accessToken"]["jwtToken"]
-         this.idToken = session["idToken"]["jwtToken"]
-         const { payload: { email } } = session["idToken"]
-         const { payload: { username }} = session["accessToken"]
-         this.email = email
-         this.username = username
-         this.createApolloClient()
+         if (session["idToken"]["jwtToken"] != this.idToken) {
+            console.log("DIFFERENT KEYS")
+            this.accessToken = session["accessToken"]["jwtToken"]
+            this.idToken = session["idToken"]["jwtToken"]
+            const { payload: { email } } = session["idToken"]
+            const { payload: { username }} = session["accessToken"]
+            this.email = email
+            this.username = username
+            this.createApolloClient()
+         }
       }
       catch(error) {
          this.destroyAuthInfo()
@@ -72,10 +76,19 @@ class AuthStore {
       })
    }
    async post(route: string, data: any) {
+      await this.setCurrentSession()
       const config = {
          headers: { Authorization: `Bearer ${this.idToken}` }
      };
       return await axios.post(`${this.endpoint}${route}`, data, config)
+   }
+   async gqlQuery(query: DocumentNode) {
+      await this.setCurrentSession()
+      return await this.apolloClient.query({query})
+   }
+   async gqlMutation(mutation: DocumentNode) {
+      await this.setCurrentSession()
+      return await this.apolloClient.mutate({mutation})
    }
 }
 

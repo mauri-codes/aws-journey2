@@ -41,7 +41,6 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
    const [ credentialsList, setCredentialsList] = useState<undefined | null | AWSCredential[]>(undefined)
    const { authStore } = useContext(StoreContext)
    const [ testParamGroup, setTestParamGroup ] = useState(undefined)
-   const apolloClient = authStore.apolloClient
    const [ allTestsSuccessful, setAllTestsSuccessful ] = useState()
 
    const [ testGroups, setTestGroups ] = useState([...testSection.testGroups])
@@ -54,10 +53,8 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
       setTestParamGroup(paramsObject)
    }, [testSection])
    useEffect(() => {
-      if (apolloClient){
-         getCredentials()
-      }
-   }, [apolloClient])
+      getCredentials()
+   }, [authStore])
 
    function updateTestGroupsResults(testResults) {
       let testGroupObject = {}
@@ -111,9 +108,7 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
    }
 
    async function getCredentials() {
-      const apolloQuery = await apolloClient.query({
-         query: getCredentialsList()
-      })
+      const apolloQuery = await authStore.gqlQuery(getCredentialsList())
       setCredentialsList(undefined)
       const response = apolloQuery.data.getAWSCredentials
       if ( response.success ) {

@@ -51,13 +51,10 @@ export default function CredentialsTableComponent (
    }
 ) {
    const { authStore } = useContext(StoreContext)
-   const apolloClient = authStore.apolloClient
    const [ loadingDeletion, setLoadingDeletion ] = useState<string>(NONE)
    async function deleteCredentials(name: string) {
       setLoadingDeletion(name)
-      const apolloMutation = await apolloClient.mutate({
-         mutation: deleteAWSCredentials(name)
-      })
+      const apolloMutation = await authStore.gqlMutation(deleteAWSCredentials(name))
       const successfulRequest = apolloMutation.data.deleteAWSCredentials.success
       setLoadingDeletion(NONE)
       if (successfulRequest) {

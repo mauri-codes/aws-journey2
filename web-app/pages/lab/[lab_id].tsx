@@ -12,7 +12,7 @@ import { StoreContext } from "../../state/RootStore"
 import { LabContentsComponent } from "../../components/Lab/LabContents"
 
 export default function  Lab () {
-   const { authStore: { apolloClient } } = useContext(StoreContext)
+   const { authStore } = useContext(StoreContext)
    const router = useRouter()
    const { lab_id } = router.query
    const [lab, setLab] = useState<LabData>()
@@ -35,13 +35,9 @@ export default function  Lab () {
    })
 
    useEffect(() => {
-      if (apolloClient){
-         getCurrentLab()
-      }
+      getCurrentLab()
       async function getCurrentLab() {
-         const apolloQuery = await apolloClient.query({
-            query: getLabQuery(lab_id)
-         })
+         const apolloQuery = await authStore.gqlQuery(getLabQuery(lab_id))
          const response = apolloQuery.data.getLab
          if (response.success) {
             setLab(response.lab)
@@ -50,7 +46,7 @@ export default function  Lab () {
             console.log("fail")
          }
       }
-   }, [apolloClient])
+   }, [authStore])
 
    return (
       <LabContainer>

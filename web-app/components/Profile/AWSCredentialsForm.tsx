@@ -43,7 +43,6 @@ export default function AWSCredentialsForm (
       setAddingCredentials: (adding: boolean) => void
    }) {
    const { authStore } = useContext(StoreContext)
-   const apolloClient = authStore.apolloClient
 
    const [ loadingSetCredentials, setLoadingSetCredentials ] = useState(NOT_LOADING)
    const [ validInputs, setValidInputs ] = useState<ValidationInputs>(undefined)
@@ -102,9 +101,7 @@ export default function AWSCredentialsForm (
    }
    async function setCredentialsInDB() {
       setLoadingSetCredentials(LOADING)
-      const response = await apolloClient.mutate({
-         mutation: setAWSCredentials(newCredentials)
-      })
+      const response = await authStore.gqlMutation(setAWSCredentials(newCredentials))
       const successfulUpdate = response.data.setAWSCredentials.success
 
       if (successfulUpdate) {
