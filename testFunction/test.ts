@@ -23,6 +23,24 @@ interface Credentials {
    }
 }
 
+interface Test {
+   id: string
+   success: boolean
+   message?: string
+   error?: string
+}
+
+interface TestGroup {
+   id: string
+   success: boolean
+   tests: Test[]
+}
+
+interface TestResults {
+   success: boolean
+   testGroups: TestGroup[]
+}
+
 function validate (params: any[]) {
    params.forEach (param => {
       let [value, label] = param
@@ -92,6 +110,8 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
       validate([[lab, "lab"], [testParams, "testParams"], [credentialsLabel, "credentialsLabel"]])
       
       let tests = await runTests(user, lab, testParams, credentialsLabel)
+
+      await recordTests(user, lab, tests)
       
       return {
          statusCode: 200,
@@ -112,6 +132,43 @@ export async function handler (event: APIGatewayProxyEvent, context: Context): P
          headers: HEADERS
       }
    }   
+}
+
+function getTestSummary(tests: TestResults) {
+   let allTests = tests.testGroups.flatMap(testGroup => testGroup.tests)
+   let successful = allTests.reduce((acc, test) => test.success ? acc+1: acc, 0)
+   let total = allTests.length
+   let failed = total - successful
+   return { successful, failed, total }
+}
+
+async function recordTests(user: string, lab: string, tests: TestResults) {
+   const currentTestSummary = getTestSummary(tests)
+   const testRecordKey = {
+      pk: `user_${user}#tests`,
+      sk: `lab_${lab}`
+   }
+   let testRecord = await dynamo.get({
+      TableName: tableName,
+      Key: testRecordKey
+   }).promise()
+
+   const params = {
+      TableName : tableName,
+      Item: {
+         ...testRecordKey,
+         summary: currentTestSummary,
+         tests
+      }
+   }
+   if (testRecord.Item == null) {
+      await dynamo.put(params).promise()
+   } else {
+      const {summary: {successful}} = testRecord.Item
+      if (successful < currentTestSummary.successful) {
+         await dynamo.put(params).promise()
+      }
+   }
 }
 
 async function getCredentials(user: string, credentialsLabel: string) {

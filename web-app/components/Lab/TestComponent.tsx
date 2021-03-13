@@ -128,9 +128,10 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
       setTestParamGroup(newParams)
    }
    function allValidInputs() {
-      const allParams = Object.keys(testParamGroup)
+      const paramsGroup = (testParamGroup == null)? {}: testParamGroup
+      const allParams = Object.keys(paramsGroup)
          .filter(param => param != "region" && param != "secondaryRegion")
-         .map(param => testParamGroup[param] != "")
+         .map(param => paramsGroup[param] != "")
       const allParamsFilled = allParams.every(param => param)
       return allParamsFilled || allParams.length == 0
    }
