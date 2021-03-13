@@ -15,6 +15,13 @@ overview:
     - CloudFront
 testData:
   tag: "s3-website"
+  permissions:
+    - s3:GetBucketWebsite
+    - s3:GetBucketPolicyStatus
+    - s3:GetBucketPublicAccessBlock
+    - cloudfront:GetDistribution
+    - cloudfront:ListDistributions
+    - cloudfront:ListTagsForResource
   testParams:
     - s3BucketName
     - region

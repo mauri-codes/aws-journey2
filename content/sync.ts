@@ -34,6 +34,7 @@ interface LabData {
    testData: {
       tag: string
       params: string[]
+      permissions: string[]
    }
    overview: {
       Description: string
