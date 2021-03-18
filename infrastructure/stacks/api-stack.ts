@@ -7,10 +7,7 @@ import { RecordTarget, ARecord, IHostedZone } from '@aws-cdk/aws-route53'
 import { ApiGateway as ApiGatewaTarget} from '@aws-cdk/aws-route53-targets';
 import { 
    Effect,
-   IRole,
    PolicyStatement,
-   Role,
-   ServicePrincipal
 } from "@aws-cdk/aws-iam";
 import { LambdaRestApi, LambdaIntegration, AuthorizationType, CfnAuthorizer, Cors, AwsIntegration } from "@aws-cdk/aws-apigateway";
 import { Table } from "@aws-cdk/aws-dynamodb";
@@ -21,9 +18,10 @@ import { Bucket, IBucket } from '@aws-cdk/aws-s3';
 
 interface APIStackProps extends cdk.StackProps {
    userpool: IUserPool,
+   filesBucket: IBucket
 }
 export class ApiStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props: APIStackProps) {
+   constructor(scope: cdk.Construct, id: string, props: APIStackProps) {
       super(scope, id, props);
 
       const { userpool } = props
@@ -34,7 +32,9 @@ export class ApiStack extends cdk.Stack {
       const apiCertificate = new AWSJourneyCertificate(this, "api-certificate", {prefix})
 
       const dynamoStatement = this.createDynamoDBStatement()
-      const apiProcessor = this.createApiProcessor(dynamoStatement)
+      const s3Statement = this.createS3Statement(props.filesBucket)
+
+      const apiProcessor = this.createApiProcessor([dynamoStatement, s3Statement])
 
 
       const testerProcessor = this.createTesterProcessor(dynamoStatement)
@@ -90,6 +90,17 @@ export class ApiStack extends cdk.Stack {
       });
    }
 
+   createS3Statement(bucket: IBucket) {
+      const s3Statement = new PolicyStatement({effect: Effect.ALLOW})
+      s3Statement.addActions(
+         "s3:GetObject"
+      )
+      s3Statement.addResources(
+         `${bucket.bucketArn}/*`
+      )
+      return s3Statement
+   }
+
    createDynamoDBStatement() {
       const dynamoStatement = new PolicyStatement({effect: Effect.ALLOW})
       dynamoStatement.addActions(
@@ -118,7 +129,7 @@ export class ApiStack extends cdk.Stack {
       processor.addToRolePolicy(policyStatement)
       return processor
    }
-   createApiProcessor(policyStatement: PolicyStatement) {
+   createApiProcessor(policyStatments: PolicyStatement[]) {
       const processor = new Function(this, 'QueryProcessor', {
          functionName: "api-apollo-backend",
          runtime: Runtime.NODEJS_12_X,
@@ -126,7 +137,10 @@ export class ApiStack extends cdk.Stack {
          timeout: Duration.seconds(30),
          code: Code.fromAsset(path.join(__dirname, '../../api/packaged'))
       });
-      processor.addToRolePolicy(policyStatement)
+      policyStatments.forEach(statement => {
+         processor.addToRolePolicy(statement)
+      })
+      
       return processor
    }
    createCognitoAuthorizer(userPoolArn: string, api: LambdaRestApi) {

@@ -9,7 +9,7 @@ let handler = (event: APIGatewayProxyEvent, context: Context, callback: Callback
     const server = new ApolloServer({
         typeDefs: appSchema,
         resolvers: resolvers(user),
-        dataSources    
+        dataSources
     })
     return server.createHandler({
         cors: {
@@ -18,6 +18,5 @@ let handler = (event: APIGatewayProxyEvent, context: Context, callback: Callback
         }
     })(event, context, callback)
 }
-
 
 exports.graphqlHandler = handler

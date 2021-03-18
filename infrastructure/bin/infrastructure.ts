@@ -13,7 +13,7 @@ const aws_env = {
 
 const app = new cdk.App();
 
-new FilesStack(app, 'files-stack', {
+const filesStack = new FilesStack(app, 'files-stack', {
    env: aws_env
 })
 
@@ -27,5 +27,6 @@ new DBStack(app, 'db-stack', {
 
 new ApiStack(app, 'api-stack', {
    env: aws_env,
-   userpool: usersStack.userPool
+   userpool: usersStack.userPool,
+   filesBucket: filesStack.filesBucket
 })

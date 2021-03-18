@@ -1,12 +1,14 @@
 import { IResolvers } from 'graphql-tools'
 import { LabSource } from "./dataSources/LabDS"
 import { UserCredentialsSource } from "./dataSources/UserCredentialsDS";
+import { S3Source } from "./dataSources/S3DS";
 
 
 interface DataSourcesObject {
     dataSources: {
         LabSource: LabSource,
-        UserCredentialsSource: UserCredentialsSource
+        UserCredentialsSource: UserCredentialsSource,
+        S3Source: S3Source
     }
 }
 
@@ -18,7 +20,10 @@ const resolvers: (user: string) => IResolvers = (user) => {
             },
             getAWSCredentials: async (_source, {}, { dataSources }: DataSourcesObject) => {
                 return dataSources.UserCredentialsSource.getAWSCredentials(user)
-            }
+            },
+            getS3SignedUrl: async (_source, {path}, { dataSources }: DataSourcesObject) => {
+                return dataSources.S3Source.getS3SignedUrl(path)
+            },
         },
         Mutation: {
             setLab: async (_source, {lab, overview, test}, { dataSources }: DataSourcesObject) => {

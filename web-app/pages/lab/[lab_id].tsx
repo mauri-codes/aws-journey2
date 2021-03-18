@@ -46,7 +46,7 @@ export default function  Lab () {
             console.log("fail")
          }
       }
-   }, [authStore])
+   }, [authStore, lab_id])
 
    return (
       <LabContainer>

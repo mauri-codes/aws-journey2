@@ -1,6 +1,6 @@
 import path from 'path'
-import AWS from 'aws-sdk';
-import { DataSource } from 'apollo-datasource';
+import AWS from 'aws-sdk'
+import { DataSource } from 'apollo-datasource'
 const fs = require('fs')
 
 const configFile = '../../config.json'

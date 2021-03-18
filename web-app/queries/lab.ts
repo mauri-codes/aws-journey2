@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 const getLabQuery = (labId) => {
    return gql`
-      query GetRates {
+      query GetLab {
          getLab(id: "${labId}") {
                message
                success

@@ -4,6 +4,7 @@ const appSchema = gql`
    type Query {
       getLab(id: ID!): LabResponse
       getAWSCredentials(user: String): AWSCredentialsResponse
+      getS3SignedUrl(path: String): SigneUrlResponse
    }
    type Mutation {
       setLab(lab: setLabInput, overview:setOverviewInput, test:setTestInput): Lab
@@ -52,6 +53,10 @@ const appSchema = gql`
    }
    input DeleteCredentialsInput {
       name: String
+   }
+   type SigneUrlResponse {
+      success: Boolean
+      signedUrl: String
    }
    type AWSCredentialsResponse {
       success: Boolean
