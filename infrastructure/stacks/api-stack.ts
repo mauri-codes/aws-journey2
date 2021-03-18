@@ -36,19 +36,8 @@ export class ApiStack extends cdk.Stack {
       const dynamoStatement = this.createDynamoDBStatement()
       const apiProcessor = this.createApiProcessor(dynamoStatement)
 
-      const filesBucket = Bucket.fromBucketName(this, "files-bucket", "aws-journey-files")
-
-      const s3Statement = this.createS3Statement(filesBucket)
-      const s3BucketApiExecuteRole = new Role(this, "s3-role", {
-         assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
-         path: "/service-role/"
-      })
-      s3BucketApiExecuteRole.addToPolicy(s3Statement)
-      filesBucket.grantRead(s3BucketApiExecuteRole)
 
       const testerProcessor = this.createTesterProcessor(dynamoStatement)
-
-      const s3Integration = this.createS3Integration(s3BucketApiExecuteRole)
 
       const api = this.createApi(apiProcessor, apiDomain, apiCertificate.certificate)
 
@@ -75,43 +64,6 @@ export class ApiStack extends cdk.Stack {
          testerIntegration,
          cognitoAuthorizer
       )
-
-      const files = api.root.addResource('{folder}')
-      files.addMethod(
-         "GET",
-         s3Integration,
-         // cognitoAuthorizer
-         {
-            methodResponses: [
-               {
-                  statusCode: "200"
-               }
-            ]
-         }
-      )
-   }
-
-   createS3Statement(s3Bucket: IBucket) {
-      const s3Statement = new PolicyStatement({effect: Effect.ALLOW})
-      s3Statement.addActions(
-         "s3:List*",
-         "s3:Get*"
-      )
-      s3Statement.addResources(
-         s3Bucket.bucketArn
-      )
-      return s3Statement
-   }
-
-   createS3Integration(s3Role: IRole) {
-      return new AwsIntegration({
-         service: 's3',
-         integrationHttpMethod: "GET",
-         path: "{bucket}",
-         options : {
-           credentialsRole: s3Role,     
-         }
-       })
    }
 
    createApi(defaultLambda: Function, apiDomain: string, certificate: ICertificate) {
