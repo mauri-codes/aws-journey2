@@ -12,6 +12,14 @@ const getLabQuery = (labId) => {
                      description
                      goals
                      services
+                     resources {
+                        resource
+                        text
+                        conditions {
+                           name
+                           value
+                        }
+                     }
                   }
                   testSection {
                      testData {

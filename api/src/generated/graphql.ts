@@ -73,6 +73,20 @@ export type Overview = {
   description?: Maybe<Scalars['String']>;
   goals?: Maybe<Array<Maybe<Scalars['String']>>>;
   services?: Maybe<Array<Maybe<Scalars['String']>>>;
+  resources?: Maybe<Array<Maybe<Resource>>>;
+};
+
+export type Resource = {
+  __typename?: 'Resource';
+  resource?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  conditions?: Maybe<Array<Maybe<Condition>>>;
+};
+
+export type Condition = {
+  __typename?: 'Condition';
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type TestSection = {
@@ -253,6 +267,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Lab: ResolverTypeWrapper<Lab>;
   Overview: ResolverTypeWrapper<Overview>;
+  Resource: ResolverTypeWrapper<Resource>;
+  Condition: ResolverTypeWrapper<Condition>;
   TestSection: ResolverTypeWrapper<TestSection>;
   TestData: ResolverTypeWrapper<TestData>;
   TestError: ResolverTypeWrapper<TestError>;
@@ -279,6 +295,8 @@ export type ResolversParentTypes = {
   Mutation: {};
   Lab: Lab;
   Overview: Overview;
+  Resource: Resource;
+  Condition: Condition;
   TestSection: TestSection;
   TestData: TestData;
   TestError: TestError;
@@ -321,6 +339,20 @@ export type OverviewResolvers<ContextType = Context, ParentType extends Resolver
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   goals?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   services?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  resources?: Resolver<Maybe<Array<Maybe<ResolversTypes['Resource']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ResourceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Resource'] = ResolversParentTypes['Resource']> = {
+  resource?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  conditions?: Resolver<Maybe<Array<Maybe<ResolversTypes['Condition']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ConditionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Condition'] = ResolversParentTypes['Condition']> = {
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -396,6 +428,8 @@ export type Resolvers<ContextType = Context> = {
   Mutation?: MutationResolvers<ContextType>;
   Lab?: LabResolvers<ContextType>;
   Overview?: OverviewResolvers<ContextType>;
+  Resource?: ResourceResolvers<ContextType>;
+  Condition?: ConditionResolvers<ContextType>;
   TestSection?: TestSectionResolvers<ContextType>;
   TestData?: TestDataResolvers<ContextType>;
   TestError?: TestErrorResolvers<ContextType>;

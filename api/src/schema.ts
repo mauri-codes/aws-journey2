@@ -21,6 +21,16 @@ const appSchema = gql`
       description: String
       goals: [String]
       services: [String]
+      resources: [Resource]
+   }
+   type Resource {
+      resource: String
+      text: String
+      conditions: [Condition]
+   }
+   type Condition {
+      name: String
+      value: String
    }
    type TestSection {
       testGroups: [TestGroup]

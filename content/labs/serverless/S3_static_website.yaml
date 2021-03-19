@@ -5,14 +5,26 @@ info:
 overview:
   description: >
     You can use Amazon S3 to host a static website. Static websites don't need an active
-    server and are generally cheaper.
+    server and are generally cheaper. In this lab you'll build a public static website
+    with https configuration.
   goals:
     - Create an S3 bucket and configure it to host a static website
-    - Upload an example SPA application
-    - Enable HTTPS with CloudFront
+    - Upload files to S3 bucket (index.html)
+    - Create a Cloudfront Distribution to allow HTTPS requests to your S3 bucket
   services:
     - S3
     - CloudFront
+  resources:
+    - resource: S3 Bucket
+      text: bucket for the static website
+      conditions:
+        - name: tagged
+          value: "s3-website"
+    - resource: Cloudfront Distribution
+      text: Distribution that allows HTTPS connections
+      conditions:
+        - name: startsWith
+          value: "journey-"
 testData:
   tag: "s3-website"
   permissions:
