@@ -1,0 +1,59 @@
+lab: IAM_groups
+info:
+  title: IAM Groups
+  location: "identity"
+overview:
+  description: >
+    IAM Groups allow you to organize users and permissions. In this lab you'll set up
+    three groups with different permissions.
+  goals:
+    - Have a group named jn-admins that has two users.
+    - Have a group named jn-finance-managers that has one user.
+    - Have a group named jn-finance-users that has two users.
+    - The jn-admins group should have attached the AdministratorAccess AWS Managed Policy.
+    - The jn-finance-managers group should have a user managed policy with full billing access.
+    - The jn-finance-users group should have a user managed policy with read only billing access.
+  services:
+    - IAM
+  resources:
+    - resource: IAM Group
+      text: IAM groups
+      conditions:
+        - name: be
+          value: "jn-admins|jn-finance-managers|jn-finance-users"
+    - resource: IAM Policy
+      text: IAM Policies
+      conditions:
+        - name: startsWith
+          value: "jn-"
+    - resource: IAM User
+      text: IAM Users
+      conditions:
+        - name: startsWith
+          value: "jn-"
+testData:
+  tag: "none"
+  permissions:
+    - iam:GetGroup
+    - iam:ListGroupPolicies
+    - iam:GetGroup
+    - iam:ListAttachedGroupPolicies
+    - iam:GetPolicyVersion
+    - iam:ListPolicyVersions
+  testParams:
+    - region
+testGroups:
+  - id: AdminGroupTests
+    title: Admin Group has AWS admin policy and two users
+    tests:
+      - id: GroupHasConfig
+  - id: FinanceUsersGroupTests
+    title: Finance Users Group has Billing Read Access and two users
+    tests:
+      - id: GroupHasConfig
+      - id: PolicyHasConfig
+  - id: FinanceManagersGroupTests
+    title: Finance Users Group has Billing Full Access and one user
+    tests:
+      - id: GroupHasConfig
+      - id: PolicyHasConfig
