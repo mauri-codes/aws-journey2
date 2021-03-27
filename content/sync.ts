@@ -5,6 +5,7 @@ import fs from "fs"
 import { safeLoad as yamlLoad } from "js-yaml"
 
 // ts-node sync.ts --lab=serverless/S3_static_website
+// ts-node sync.ts --lab=identity/IAM_groups
 
 const dynamo = new DynamoDB.DocumentClient({region: "us-east-1"})
 

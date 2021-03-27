@@ -44,16 +44,16 @@ testData:
     - region
 testGroups:
   - id: AdminGroupTests
-    title: Admin Group has AWS admin policy and two users
+    title: Admin Group Tests
     tests:
-      - id: GroupHasConfig
+      - id: AdminGroupConfig
   - id: FinanceUsersGroupTests
-    title: Finance Users Group has Billing Read Access and two users
+    title: Finance Users Group Tests
     tests:
-      - id: GroupHasConfig
-      - id: PolicyHasConfig
+      - id: FinanceUsersGroupConfig
+      - id: FinanceUserPolicyConfig
   - id: FinanceManagersGroupTests
-    title: Finance Users Group has Billing Full Access and one user
+    title: Finance Managers Group Tests
     tests:
-      - id: GroupHasConfig
-      - id: PolicyHasConfig
+      - id: FinanceManagersGroupConfig
+      - id: FinanceManagersPolicyConfig

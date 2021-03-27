@@ -75,17 +75,20 @@ async function runTests(user: string, lab: string, testParams: TestParams, crede
       if (!allParams) {
          throw "Parameters missing in testParams"
       }
-      const tests = new testSuite(
-         testParams,
-         { Key: "journey", Value: tag },
-         {
+      let testArguments: any[] = [
+         testParams
+      ]
+      if (tag !== "none") {
+         testArguments.push({ Key: "journey", Value: tag })
+      }
+      testArguments.push({
             region,
             credentials: {
                id: credentials.accessKeyId,
                secret: credentials.secret
             }
-         }
-      )
+         })
+      const tests = new testSuite(...testArguments)
       console.log(JSON.stringify(testParams))
       console.log(JSON.stringify({ Key: "journey", Value: tag }))  
 

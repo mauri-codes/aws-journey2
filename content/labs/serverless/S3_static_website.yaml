@@ -18,13 +18,13 @@ overview:
     - resource: S3 Bucket
       text: bucket for the static website
       conditions:
-        - name: tagged
-          value: "s3-website"
+        - name: startsWith
+          value: "jn-"
     - resource: Cloudfront Distribution
       text: Distribution that allows HTTPS connections
       conditions:
-        - name: startsWith
-          value: "journey-"
+        - name: tagged
+          value: "s3-website"
 testData:
   tag: "s3-website"
   permissions:
@@ -42,37 +42,11 @@ testGroups:
     title: S3 Website Bucket Configuration
     tests:
       - id: BucketPolicyIsPublic
-        errors:
-          - code: NoSuchBucketPolicy
-            message: No Bucket Policy Found
       - id: BucketWebsiteConfiguration
-        errors:
-          - code: NoSuchWebsiteConfiguration
-            message: No Website Configuration Found
-          - code: _MissingIndexErrorDocuments
-            message: No Index or Error Files Configured in Website Configuration
       - id: AccessBlockIsPublic
       - id: BucketWebsiteEndpointOperational
-        errors:
-          - code: "403"
-            message: "S3 Website endpoint not availble, Forbidden 403"
   - id: CloudFrontTests
     title: CloudFront Distribution Configuration
     tests:
       - id: DistributionHasHTTPSDefaultConfiguration
-        errors:
-          - code: _CloudFrontNotDefaultCertificate
-            message: CloudFront is not the default Certificate Source for distribution
       - id: DistributionHasS3WebsiteOrigin
-        errors:
-          - code: _NoS3WebsiteDomainInCloudFront
-            message: No origin with S3 website endpoint found
-    errors:
-      - code: _NoDistributionList
-        message: No distribution configuration found
-      - code: _TooManyDistributions
-        message: You have more than 10 distributions in your account
-      - code: _NoTaggedDistribution
-        message: No distribution found with tag [journey, s3-website]
-      - code: _OnlyOneTaggedDistributtionAllowed
-        message: You should only have one distribution tagged with [journey, s3-website]

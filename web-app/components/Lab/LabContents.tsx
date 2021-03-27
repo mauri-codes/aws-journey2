@@ -15,7 +15,7 @@ interface LabContentsInput {
 function LabContentsComponent ({tabList, activeTab, lab}: LabContentsInput) {
    return (
       <div>
-         <LabTitle sx={{fontFamily: "title"}}>S3 static Website</LabTitle>
+         <LabTitle sx={{fontFamily: "title"}}>{lab.title}</LabTitle>
       <LabContents>
          {activeTab === "Overview" &&
             <OverviewComponent overview={lab.overview} />
