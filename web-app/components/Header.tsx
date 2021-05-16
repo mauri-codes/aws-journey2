@@ -13,6 +13,7 @@ import { pageActions } from "../events/publishers";
 const HeaderComponent = () => {
    const router = useRouter()
    let [ userMenu, setUserMenu ] = useState<boolean>(false)
+   let [ user, setUser ] = useState("")
    useEffect(() => {
       currentSession()
    })
@@ -34,7 +35,7 @@ const HeaderComponent = () => {
             </NavLink>
             <NavLink onClick={(event) => {event.stopPropagation(); setUserMenu(!userMenu)}}>
                <div sx={{ variant: 'header.hover', color: userMenu?"primary": "black"}} >
-                  thompson <FontAwesomeIcon icon={faAngleDown} />
+                  {user} <FontAwesomeIcon icon={faAngleDown} />
                </div>
                {userMenu &&
                   <UserMenu sx={{ backgroundColor: "background", borderColor: "accent" }}>
@@ -50,8 +51,9 @@ const HeaderComponent = () => {
       </Header>
    )
    async function currentSession() {
-      let x = await Auth.currentUserInfo()
-      console.log(x)
+      let userInfo = await Auth.currentUserInfo()
+      setUser(userInfo.username)
+      console.log(userInfo)
    }
 }
 

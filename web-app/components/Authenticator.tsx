@@ -15,14 +15,19 @@ Amplify.configure({
 });
 
 const ProtectedRoutes = [
-    "/labs"
+    "/labs",
+    "/lab/"
 ]
 
 const AuthenticatorComponent = ({children}) => {
    const { pathname } = useRouter()
    const [authState, setAuthState] = useState<AuthState>();
    const [user, setUser] = useState<object | undefined>();
-   const protectedRoute = ProtectedRoutes.includes(pathname)
+   let protectedRoute = ProtectedRoutes.includes(pathname)
+
+   if (!protectedRoute) {
+      protectedRoute = ProtectedRoutes.reduce((acc, route)=> pathname.startsWith(route) || acc, false)
+   }
    
 
    const signUpFields = [
