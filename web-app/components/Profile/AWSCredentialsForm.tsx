@@ -102,18 +102,20 @@ export default function AWSCredentialsForm (
    async function setCredentialsInDB() {
       setLoadingSetCredentials(LOADING)
       const response = await authStore.gqlMutation(setAWSCredentials(newCredentials))
-      const successfulUpdate = response.data.setAWSCredentials.success
-
-      if (successfulUpdate) {
-         setLoadingSetCredentials(REQUEST_SUCCESSFUL)
-         await delay(2000);
-         addCredentialsRecord(newCredentials)
-         cancelAddingCredentials()
-      } else {
-         setLoadingSetCredentials(REQUEST_FAILED)
-         await delay(2000);
+      if ( response != null ) {
+         const successfulUpdate = response.data.setAWSCredentials.success
+   
+         if (successfulUpdate) {
+            setLoadingSetCredentials(REQUEST_SUCCESSFUL)
+            await delay(2000);
+            addCredentialsRecord(newCredentials)
+            cancelAddingCredentials()
+         } else {
+            setLoadingSetCredentials(REQUEST_FAILED)
+            await delay(2000);
+         }
+         setLoadingSetCredentials(NOT_LOADING)
       }
-      setLoadingSetCredentials(NOT_LOADING)
    }
 
    function cancelAddingCredentials() {

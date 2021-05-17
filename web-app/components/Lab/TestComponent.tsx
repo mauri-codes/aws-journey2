@@ -109,13 +109,16 @@ function TestsComponent ({testSection}: {testSection: TestSection}) {
 
    async function getCredentials() {
       const apolloQuery = await authStore.gqlQuery(getCredentialsList())
-      setCredentialsList(undefined)
-      const response = apolloQuery.data.getAWSCredentials
-      if ( response.success ) {
-         setCredentialsList(response.credentialsGroup)
-         setCredentials({name: response.credentialsGroup[0].name})
-      } else {
-         setCredentialsList(null)
+      if (apolloQuery != null) {
+         setCredentialsList(undefined)
+         const response = apolloQuery.data.getAWSCredentials
+         
+         if ( response.success && response.credentialsGroup.length !== 0) {
+            setCredentialsList(response.credentialsGroup)
+            setCredentials({name: response.credentialsGroup[0].name})
+         } else {
+            setCredentialsList(null)
+         }
       }
    }
    function updateField(param: string, input: string) {

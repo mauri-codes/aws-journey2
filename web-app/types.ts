@@ -36,6 +36,7 @@ export interface LabData {
    title
    overview: Overview
    testSection: TestSection
+   labCompleted: boolean
 }
 
 export interface AWSCredential {

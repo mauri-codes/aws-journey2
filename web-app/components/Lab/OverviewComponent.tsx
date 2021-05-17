@@ -34,7 +34,9 @@ function OverviewComponent ({overview}: {overview: Overview}) {
    )
    async function getInfrastructureImage() {
       const apolloQuery = await authStore.gqlQuery(getS3SignedUrl(`labs/${lab_id}/infrastructure.png`))
-      setInfraImg(apolloQuery.data.getS3SignedUrl.signedUrl)
+      if (apolloQuery != null) {
+         setInfraImg(apolloQuery.data.getS3SignedUrl.signedUrl)
+      }
    }
 }
 

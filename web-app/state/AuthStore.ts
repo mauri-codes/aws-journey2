@@ -32,7 +32,6 @@ class AuthStore {
          const session = await Auth.currentSession()
          console.log(session)
          if (session["idToken"]["jwtToken"] != this.idToken) {
-            console.log("DIFFERENT KEYS")
             this.accessToken = session["accessToken"]["jwtToken"]
             this.idToken = session["idToken"]["jwtToken"]
             const { payload: { email } } = session["idToken"]
@@ -83,12 +82,20 @@ class AuthStore {
       return await axios.post(`${this.endpoint}${route}`, data, config)
    }
    async gqlQuery(query: DocumentNode) {
-      await this.setCurrentSession()
-      return await this.apolloClient.query({query})
+      try {
+         await this.setCurrentSession()
+         return await this.apolloClient.query({query})
+      } catch {
+         return null
+      }
    }
    async gqlMutation(mutation: DocumentNode) {
-      await this.setCurrentSession()
-      return await this.apolloClient.mutate({mutation})
+      try {
+         await this.setCurrentSession()
+         return await this.apolloClient.mutate({mutation})
+      } catch {
+         return null
+      }
    }
 }
 

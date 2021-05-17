@@ -25,12 +25,14 @@ export default function AWSCredentialsComponent () {
 
    async function getCredentials() {
       const apolloQuery = await authStore.gqlQuery(getCredentialsList())
-      setCredentialsList(undefined)
-      const response = apolloQuery.data.getAWSCredentials
-      if ( response.success ) {
-         setCredentialsList(response.credentialsGroup)
-      } else {
-         setCredentialsList(null)
+      if (apolloQuery != null) {
+         setCredentialsList(undefined)
+         const response = apolloQuery.data.getAWSCredentials
+         if ( response.success ) {
+            setCredentialsList(response.credentialsGroup)
+         } else {
+            setCredentialsList(null)
+         }
       }
    }
 

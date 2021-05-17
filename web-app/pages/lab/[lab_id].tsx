@@ -37,12 +37,14 @@ export default function  Lab () {
       getCurrentLab()
       async function getCurrentLab() {
          const apolloQuery = await authStore.gqlQuery(getLabQuery(lab_id))
-         const response = apolloQuery.data.getLab
-         if (response.success) {
-            setLab(response.lab)
-            console.log("success")
-         } else {
-            console.log("fail")
+         if ( apolloQuery != null) {
+            const response = apolloQuery.data.getLab
+            if (response.success) {
+               setLab(response.lab)
+               console.log("success")
+            } else {
+               console.log("fail")
+            }
          }
       }
    }, [authStore, lab_id])

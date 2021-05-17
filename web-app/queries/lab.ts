@@ -8,6 +8,7 @@ const getLabQuery = (labId) => {
                success
                lab {
                   title
+                  labCompleted
                   overview {
                      description
                      goals

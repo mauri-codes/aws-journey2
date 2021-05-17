@@ -55,12 +55,13 @@ export default function CredentialsTableComponent (
    async function deleteCredentials(name: string) {
       setLoadingDeletion(name)
       const apolloMutation = await authStore.gqlMutation(deleteAWSCredentials(name))
-      const successfulRequest = apolloMutation.data.deleteAWSCredentials.success
-      setLoadingDeletion(NONE)
-      if (successfulRequest) {
-         deleteCredentialsRecord(name)
+      if (apolloMutation != null) {
+         const successfulRequest = apolloMutation.data.deleteAWSCredentials.success
+         setLoadingDeletion(NONE)
+         if (successfulRequest) {
+            deleteCredentialsRecord(name)
+         }
       }
-
    }
    return (
       <TableContainer component={Paper}>

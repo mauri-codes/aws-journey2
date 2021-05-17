@@ -43,17 +43,22 @@ const HeaderComponent = () => {
                         Profile
                      </UserMenuOption>
                      <UserMenuOption sx={{"&:hover": { backgroundColor: "accentBright"}}}> Credentials </UserMenuOption>
-                     <UserMenuOption sx={{"&:hover": { backgroundColor: "accentBright"}}}> Sign Out </UserMenuOption>
+                     <UserMenuOption sx={{"&:hover": { backgroundColor: "accentBright"}}} onClick={() => logout()}> Sign Out </UserMenuOption>
                   </UserMenu>
                }
             </NavLink>
          </Nav>
       </Header>
    )
+   async function logout() {
+      await Auth.signOut()
+   }
    async function currentSession() {
       let userInfo = await Auth.currentUserInfo()
-      setUser(userInfo.username)
-      console.log(userInfo)
+      if (userInfo) {
+         setUser(userInfo.username)
+         console.log(userInfo)
+      }
    }
 }
 

@@ -6,6 +6,7 @@ import { Tabs } from "./styled";
 import { LabData } from "../../types";
 import { OverviewComponent } from "./OverviewComponent";
 import { TestsComponent } from "./TestComponent";
+import { CheckCircleOutlined } from '@material-ui/icons';
 
 interface LabContentsInput {
    tabList: JSX.Element[]
@@ -15,7 +16,12 @@ interface LabContentsInput {
 function LabContentsComponent ({tabList, activeTab, lab}: LabContentsInput) {
    return (
       <div>
-         <LabTitle sx={{fontFamily: "title"}}>{lab.title}</LabTitle>
+         <LabTitle sx={{fontFamily: "title"}}>
+            {lab.labCompleted &&
+               <CheckCircleOutlined sx={{color: "successGreen"}} />
+            }
+            &nbsp;{lab.title}
+         </LabTitle>
       <LabContents>
          {activeTab === "Overview" &&
             <OverviewComponent overview={lab.overview} />
