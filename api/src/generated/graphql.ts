@@ -66,6 +66,7 @@ export type Lab = {
   title?: Maybe<Scalars['String']>;
   overview?: Maybe<Overview>;
   testSection?: Maybe<TestSection>;
+  labCompleted?: Maybe<Scalars['Boolean']>;
 };
 
 export type Overview = {
@@ -266,6 +267,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Mutation: ResolverTypeWrapper<{}>;
   Lab: ResolverTypeWrapper<Lab>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Overview: ResolverTypeWrapper<Overview>;
   Resource: ResolverTypeWrapper<Resource>;
   Condition: ResolverTypeWrapper<Condition>;
@@ -277,7 +279,6 @@ export type ResolversTypes = {
   SetCredentialsInput: SetCredentialsInput;
   DeleteCredentialsInput: DeleteCredentialsInput;
   SigneUrlResponse: ResolverTypeWrapper<SigneUrlResponse>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   AWSCredentialsResponse: ResolverTypeWrapper<AwsCredentialsResponse>;
   AWSCredentials: ResolverTypeWrapper<AwsCredentials>;
   ResponseState: ResolverTypeWrapper<ResponseState>;
@@ -294,6 +295,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Mutation: {};
   Lab: Lab;
+  Boolean: Scalars['Boolean'];
   Overview: Overview;
   Resource: Resource;
   Condition: Condition;
@@ -305,7 +307,6 @@ export type ResolversParentTypes = {
   SetCredentialsInput: SetCredentialsInput;
   DeleteCredentialsInput: DeleteCredentialsInput;
   SigneUrlResponse: SigneUrlResponse;
-  Boolean: Scalars['Boolean'];
   AWSCredentialsResponse: AwsCredentialsResponse;
   AWSCredentials: AwsCredentials;
   ResponseState: ResponseState;
@@ -332,6 +333,7 @@ export type LabResolvers<ContextType = Context, ParentType extends ResolversPare
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   overview?: Resolver<Maybe<ResolversTypes['Overview']>, ParentType, ContextType>;
   testSection?: Resolver<Maybe<ResolversTypes['TestSection']>, ParentType, ContextType>;
+  labCompleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -16,6 +16,7 @@ const appSchema = gql`
       title: String
       overview: Overview
       testSection: TestSection
+      labCompleted: Boolean
    }
    type Overview {
       description: String

@@ -16,7 +16,7 @@ const resolvers: (user: string) => IResolvers = (user) => {
     return {
         Query: {
             getLab: async (_source, {id}, { dataSources }: DataSourcesObject) => {
-                return dataSources.LabSource.getLab(id)
+                return dataSources.LabSource.getLab(id, user)
             },
             getAWSCredentials: async (_source, {}, { dataSources }: DataSourcesObject) => {
                 return dataSources.UserCredentialsSource.getAWSCredentials(user)

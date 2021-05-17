@@ -13,7 +13,7 @@ class LabSource extends DynamoDataSource {
       super('aws-journey', 'pk')
    }
    @Catch
-   async getLab(id: string) {
+   async getLab(id: string, user:string) {
       let labData = {}
       let queryResult = await this.query(`lab_${id}`)
       if (queryResult?.length === 0) {
@@ -31,7 +31,13 @@ class LabSource extends DynamoDataSource {
       if (summaryLab) {
          labData = (summaryLab["data"] || {});
       }
-      const lab = {...summaryLab, ...labData}
+      const lab = {
+         ...summaryLab,
+         ...labData,
+         ...{
+            labCompleted: await this.getUserLabStatus(id, user)
+         }
+      }      
       return {
          success: true,
          lab
@@ -67,6 +73,17 @@ class LabSource extends DynamoDataSource {
             }, {})
          return summaryLab
       }
+   }
+   async getUserLabStatus(lab_id: string, user: string) {
+      let record: DynamoRecord = {
+         pk: `user_${user}#completed`,
+         sk: `lab_${lab_id}`
+      }
+      let response = await this.get(record)
+      if (response.Item == null) {
+         return false
+      }
+      return response.Item.status
    }
    async updateLab(lab: Lab) {
       const pk = `lab_${lab.id}`

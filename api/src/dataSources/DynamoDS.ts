@@ -76,6 +76,13 @@ class DynamoDataSource extends DataSource {
       };
       return dynamo.delete(params).promise()
    }
+   async get(record: DynamoRecord) {
+      const params = {
+         TableName: this.tableName,
+         Key: record
+      }
+      return dynamo.get(params).promise()
+   }
 }
 
 export { DynamoDataSource }
