@@ -172,6 +172,23 @@ async function recordTests(user: string, lab: string, tests: TestResults) {
          await dynamo.put(params).promise()
       }
    }
+   await saveLabStatus(tests.success, user, lab)
+}
+
+async function saveLabStatus(status: boolean, user: string, lab: string) {
+   const params = {
+      TableName : tableName,
+      Item: {
+         pk: `user_${user}#completed`,
+         sk: `lab_${lab}`,
+         status,
+         user,
+         lab
+      }
+   }
+   if (status) {
+      await dynamo.put(params).promise()
+   }
 }
 
 async function getCredentials(user: string, credentialsLabel: string) {
